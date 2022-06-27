@@ -1,0 +1,6 @@
+{
+  "parent": "wares:block/crate",
+  "textures": {
+    "end": "wares:block/crate_opened"
+  }
+}
