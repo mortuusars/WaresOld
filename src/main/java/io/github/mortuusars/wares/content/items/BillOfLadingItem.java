@@ -49,11 +49,7 @@ public class BillOfLadingItem extends Item {
         super(properties);
     }
 
-    public static final Method _containerGetItemsMethod;
 
-    static {
-        _containerGetItemsMethod = ObfuscationReflectionHelper.findMethod(RandomizableContainerBlockEntity.class, "m_7086_");
-    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
@@ -109,54 +105,18 @@ public class BillOfLadingItem extends Item {
 
         ItemStack stack = pContext.getPlayer().getItemInHand(pContext.getHand());
 
-        Ware ware = new Ware();
-        ware.title = "test ware";
-
-        ware.requested = new WareItem[]{
-                new WareItem() {
-                    {
-                        item = "minecraft:apple";
-                        count = 32;
-                    }
-                },
-                new WareItem() {
-                    {
-                        item = "minecraft:barrel";
-                        count = 6;
-                    }
-                }
-        };
-
-        ware.payment = new WareItem[]{
-                new WareItem() {
-                    {
-                        item = "minecraft:emerald";
-                        count = 32;
-                    }
-                },
-                new WareItem() {
-                    {
-                        item = "minecraft:gold_ingot";
-                        count = 6;
-                    }
-                }
-        };
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        String serializedWare = gson.toJson(ware);
 
 
 
-        CompoundTag tag = new CompoundTag();
-        tag.putString("Ware", serializedWare);
 
-        stack.setTag(tag);
+//        CompoundTag tag = new CompoundTag();
+//        tag.putString("Ware", serializedWare);
+//
+//        stack.setTag(tag);
 
         return super.useOn(pContext);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public InteractionResult onItemUseFirst(ItemStack heldItemStack, UseOnContext context) {
 
@@ -171,74 +131,12 @@ public class BillOfLadingItem extends Item {
             return InteractionResult.PASS;
 
         ShippingCrate.convertToShippingCrate(level, blockPos, clickedBlockState, heldItemStack);
+
+        if (!level.isClientSide && !Objects.requireNonNull(context.getPlayer()).isCreative())
+            heldItemStack.shrink(1);
+
         return InteractionResult.SUCCESS;
-
-//        ArrayList<ItemStack> oldItems = new ArrayList<>();
-//
-//        BlockEntity oldBlockEntity = level.getBlockEntity(blockPos);
-//        if (oldBlockEntity != null) {
-//            oldItems = getOldBlockEntityItems(oldBlockEntity);
-//
-//            // Drop excess items on the floor
-//            if (oldItems.size() > 26){
-//                List<ItemStack> excess = oldItems.subList(26, oldItems.size());
-//                double x = blockPos.getX() + 0.5f;
-//                double y = blockPos.getY() + 0.5f;
-//                double z = blockPos.getZ() + 0.5f;
-//                for (ItemStack excessItemStack : excess) {
-//                    level.addFreshEntity(
-//                            new ItemEntity(level, x, y, z, excessItemStack));
-//                }
-//            }
-//        }
-//
-//        level.removeBlockEntity(blockPos);
-//
-//        Block newBlock = ModBlocks.SHIPPING_CRATE.get();
-//        BlockState newBlockState = newBlock.defaultBlockState();
-//
-//        level.setBlock(blockPos, newBlockState, Block.UPDATE_ALL);
-//
-//        BlockEntity newEntity = level.getBlockEntity(blockPos);
-//        if (newEntity == null)
-//            LogUtils.getLogger().error("Cannot get ShippingCrate block entity.");
-//        else{
-//            ArrayList<ItemStack> finalOldItems = oldItems;
-//            newEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(itemHandler -> {
-//                    for (int i = 0; i < 27; i++) {
-//                        if (i < finalOldItems.size() && finalOldItems.get(i) != null)
-//                            itemHandler.insertItem(i, finalOldItems.get(i), false);
-//                    }
-//                }
-//            );
-//        }
-//
-//        if (!Objects.requireNonNull(context.getPlayer()).isCreative())
-//            heldItemStack.shrink(1);
-
-//        return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("unchecked")
-    private ArrayList<ItemStack> getOldBlockEntityItems(BlockEntity blockEntity) {
-        ArrayList<ItemStack> oldItems = new ArrayList<>();
-        Optional<IItemHandler> itemHandlerOptional = blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve();
 
-        if (itemHandlerOptional.isPresent()) {
-            IItemHandler handler = itemHandlerOptional.get();
-            IntStream.range(0, handler.getSlots())
-                    .mapToObj(handler::getStackInSlot)
-                    .forEach(oldItems::add);
-        } else {
-            if (blockEntity instanceof RandomizableContainerBlockEntity container) {
-                try {
-                    oldItems.addAll((Collection<? extends ItemStack>) _containerGetItemsMethod.invoke(container));
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    LogUtils.getLogger().error("Cannot invoke 'm_7086_ - getItems' method using reflection.\n" + e);
-                }
-            }
-        }
-
-        return oldItems;
-    }
 }

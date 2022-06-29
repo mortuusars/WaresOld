@@ -16,6 +16,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         withExistingParent("crate", modLoc("block/crate"));
         withExistingParent("shipping_crate", mcLoc("block/stripped_oak_wood"));
 
+        singleTexture("purchase_request", mcLoc("item/generated"), "layer0", modLoc("item/purchase_request"));
         singleTexture("bill_of_lading", mcLoc("item/generated"), "layer0", modLoc("item/bill_of_lading"));
     }
 }
