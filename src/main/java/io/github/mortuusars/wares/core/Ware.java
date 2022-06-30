@@ -38,6 +38,19 @@ public class Ware {
         return stacks;
     }
 
+    @Override
+    public String toString() {
+        return "Ware{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", rarity=" + rarity +
+                ", weight=" + weight +
+                ", requestedItems=" + requestedItems +
+                ", paymentItems=" + paymentItems +
+                ", experience=" + experience +
+                '}';
+    }
+
     public static class Builder{
 
         private final Ware _ware = new Ware();

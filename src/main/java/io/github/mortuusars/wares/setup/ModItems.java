@@ -18,7 +18,7 @@ public class ModItems {
             () -> new BlockItem(ModBlocks.SHIPPING_CRATE.get(), new Item.Properties().tab(Registries.WARES_CREATIVE_TAB)));
 
 
-    public static final RegistryObject<Item> PURCHASE_ORDER = Registries.ITEMS.register("purchase_order",
+    public static final RegistryObject<Item> PURCHASE_REQUEST = Registries.ITEMS.register("purchase_request",
             () -> new PurchaseOrderItem(new Item.Properties().tab(Registries.WARES_CREATIVE_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> BILL_OF_LADING = Registries.ITEMS.register("bill_of_lading",

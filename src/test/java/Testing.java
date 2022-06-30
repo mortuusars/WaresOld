@@ -1,57 +1,72 @@
-import io.github.mortuusars.wares.core.WareItem;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.ItemStack;
+import io.github.mortuusars.wares.core.Ware;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class Testing {
+
+    public static ArrayList<Ware> wares = new ArrayList<>();
+    public static Map<Ware, Integer> results = new HashMap<>();
+
     public static void main(String[] args){
+        wares.add(new Ware.Builder().weight(1f).build());
+        wares.add(new Ware.Builder().weight(1f).build());
+        wares.add(new Ware.Builder().weight(1f).build());
+        wares.add(new Ware.Builder().weight(1f).build());
+        wares.add(new Ware.Builder().weight(2f).build());
+        wares.add(new Ware.Builder().weight(4f).build());
+        wares.add(new Ware.Builder().weight(7f).build());
+        wares.add(new Ware.Builder().weight(20f).build());
+        wares.add(new Ware.Builder().weight(50f).build());
 
-//
-//        Ware ware = new Ware();
-//        ware.title = "test ware";
-//        ware.experience = 20f;
-//
-//        ware.requestedItems.add(new WareItem("minecraft:apple", null, 32));
-//        ware.requestedItems.add(new WareItem("minecraft:barrel", null, 6));
-//        ware.requestedItems.add(new WareItem(null, "minecraft:coals", 6));
-//
-//        ware.paymentItems.add(new WareItem("minecraft:emerald", null, 32));
-//        ware.paymentItems.add(new WareItem("minecraft:gold_ingot", null, 21));
-//
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        String serializedWare = gson.toJson(ware);
+        wares.forEach((w) -> results.put(w, 0));
 
+        final int RUNS_COUNT = 1000;
 
-
-        WareItem regularSmall = new WareItem("minecraft:gold_ingot", null, 21);
-        WareItem regularBig = new WareItem("minecraft:gold_ingot", null, 224);
-
-        WareItem tagSmall = new WareItem(null, "minecraft:coals", 21);
-        WareItem tagBig = new WareItem(null, "minecraft:coals", 221);
-
-//        String serializedregularSmall = new Gson().toJson(regularSmall);
-//        String serializedregularBig = new Gson().toJson(regularBig);
-//
-//        String serializedtagSmall = new Gson().toJson(tagSmall);
-//        String serializedtagBig = new Gson().toJson(tagBig);
-
-
-        ArrayList<WareItem> items = new ArrayList<>();
-        items.add(regularSmall);
-        items.add(regularBig);
-        items.add(tagSmall);
-        items.add(tagBig);
-
-        for (WareItem wareItem : items) {
-            NonNullList<ItemStack> stacks = wareItem.createItemStacks();
+        for (int i = 0; i < RUNS_COUNT; i++) {
+            testWeights();
         }
 
-//        String serializedItem = gson.toJson(item);
-//        System.out.println("\n\n");
-//        System.out.println(serializedWare);
-//        System.out.println("\n\n");
-//        System.out.println(serializedItem);
-//        System.out.println("\n\n");
+        printResults(RUNS_COUNT);
+    }
+
+    private static void printResults(int runs) {
+
+        System.out.printf("RESULTS for %s runs:\n%n", runs);
+//
+//        HashMap<Ware, Integer> ordered = new HashMap<>();
+//        ordered.putAll(results.entrySet().stream().sorted((e1, e2) -> e1.getValue() > e2.getValue() ? -1 : 1).map);
+        for (var res : results.entrySet()){
+            Ware ware = res.getKey();
+            int pickedCount = res.getValue();
+            float chance = (pickedCount / (float)runs) * 100.0f;
+            System.out.printf("Item with weight: [%s] - Picked [%s] \t\t-\t\t %s%%\n", ware.weight, pickedCount, String.format("%.1f", chance));
+        }
+
+    }
+
+    private static void testWeights() {
+        wares.stream().map(w -> w.weight).toList();
+
+        var totals = new ArrayList<Float>();
+        float runningTotal = 0;
+
+        for (var ware : wares){
+            runningTotal += ware.weight;
+            totals.add(runningTotal);
+        }
+
+        float pick = new Random().nextFloat(0f, runningTotal);
+        for (int i = 0; i < totals.size(); i++) {
+            if (pick < totals.get(i)){
+                Ware ware = wares.get(i);
+                int count = results.get(ware);
+                results.compute(wares.get(i), ((ware1, integer) -> ++integer));
+                break;
+            }
+        }
+
     }
 }
