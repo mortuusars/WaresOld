@@ -6,7 +6,8 @@ public enum Rarity {
     COMMON(20),
     UNCOMMON(12),
     RARE(5),
-    EXTREMELY_RARE(1);
+    EXTREMELY_RARE(1),
+    TREASURE(0);
 
     private final int weight;
 

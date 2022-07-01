@@ -1,6 +1,6 @@
 {
   "parent": "wares:block/crate",
   "textures": {
-    "up": "wares:block/crate_opened"
+    "up": "wares:block/shipping_crate"
   }
 }

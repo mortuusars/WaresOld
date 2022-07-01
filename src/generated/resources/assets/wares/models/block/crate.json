@@ -1,8 +1,8 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "minecraft:block/cube_top",
   "textures": {
     "side": "wares:block/crate_side",
-    "end": "wares:block/crate",
+    "top": "wares:block/crate",
     "particle": "wares:block/crate"
   }
 }

@@ -1,7 +1,56 @@
 {
   "variants": {
-    "": {
-      "model": "minecraft:block/stripped_oak_wood"
+    "facing=down,open=false": {
+      "model": "wares:block/shipping_crate",
+      "x": 180
+    },
+    "facing=up,open=false": {
+      "model": "wares:block/shipping_crate"
+    },
+    "facing=north,open=false": {
+      "model": "wares:block/shipping_crate",
+      "x": 90
+    },
+    "facing=south,open=false": {
+      "model": "wares:block/shipping_crate",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=false": {
+      "model": "wares:block/shipping_crate",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=false": {
+      "model": "wares:block/shipping_crate",
+      "x": 90,
+      "y": 90
+    },
+    "facing=down,open=true": {
+      "model": "wares:block/shipping_crate_opened",
+      "x": 180
+    },
+    "facing=up,open=true": {
+      "model": "wares:block/shipping_crate_opened"
+    },
+    "facing=north,open=true": {
+      "model": "wares:block/shipping_crate_opened",
+      "x": 90
+    },
+    "facing=south,open=true": {
+      "model": "wares:block/shipping_crate_opened",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west,open=true": {
+      "model": "wares:block/shipping_crate_opened",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east,open=true": {
+      "model": "wares:block/shipping_crate_opened",
+      "x": 90,
+      "y": 90
     }
   }
 }

@@ -1,27 +1,41 @@
 package io.github.mortuusars.wares.content.items;
 
-import com.google.gson.Gson;
 import io.github.mortuusars.wares.content.ShippingCrate;
-import io.github.mortuusars.wares.core.Ware;
+import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.setup.ModTags;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class BillOfLadingItem extends Item {
     public BillOfLadingItem(Properties properties) {
         super(properties);
     }
 
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
+        Optional<Ware> ware = WareUtils.readWareFromStackNBT(stack);
+        ware.ifPresent(w -> {
+            components.add(new TextComponent(""));
+            NonNullList<Component> wareTooltipInfo = WareUtils.getWareTooltipInfo(w);
+            components.addAll(wareTooltipInfo);
+        });
+    }
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
@@ -39,18 +53,7 @@ public class BillOfLadingItem extends Item {
 
             return InteractionResult.SUCCESS;
         }
-        else if (stack.hasTag()){
-            CompoundTag tag = stack.getTag();
-            if (tag.contains("Ware")){
-                String serializedWare = tag.get("Ware").getAsString();
-                context.getPlayer().sendMessage(new TextComponent(new Gson().fromJson(serializedWare, Ware.class).toString()), Util.NIL_UUID);
-                return InteractionResult.SUCCESS;
-            }
-        }
-
 
         return InteractionResult.PASS;
     }
-
-
 }

@@ -1,76 +1,83 @@
 package io.github.mortuusars.wares;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import io.github.mortuusars.wares.core.Ware;
-import io.github.mortuusars.wares.core.WareItem;
+import com.mojang.serialization.JsonOps;
+import io.github.mortuusars.wares.commands.WaresCommand;
+import io.github.mortuusars.wares.core.ware.PotentialWare;
+import io.github.mortuusars.wares.core.ware.WareStorage;
 import io.github.mortuusars.wares.setup.ClientSetup;
 import io.github.mortuusars.wares.setup.Registries;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.nbt.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.server.command.ConfigCommand;
 import org.slf4j.Logger;
-
-import java.util.Random;
-import java.util.UUID;
 
 @Mod(Wares.MOD_ID)
 public class Wares
 {
     public static final String MOD_ID = "wares";
+    public static final WareStorage WARE_STORAGE = new WareStorage();
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public Wares()
     {
         Registries.init();
+
+        // Testing
         MinecraftForge.EVENT_BUS.addListener(this::onPlayerRightClick);
+
+        MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
+
+        // TODO proper ware loading and reloading
+        WARE_STORAGE.loadWares();
     }
 
-    public static NonNullList<Ware> getWares(){
-        NonNullList<Ware> wares = NonNullList.create();
-        wares.add(new Ware());
+    public static NonNullList<PotentialWare> getWares(){
+        NonNullList<PotentialWare> wares = NonNullList.create();
+        wares.add(new PotentialWare());
         return wares;
     }
 
     public void onPlayerRightClick(PlayerInteractEvent event){
 
-//        if (event.getPlayer().level.isClientSide)
+//        if (event.getWorld().isClientSide)
 //            return;
 //
-//        if (!event.getPlayer().isSecondaryUseActive())
+//        if (event.getHand() == InteractionHand.OFF_HAND)
 //            return;
 //
-//        NonNullList<Ware> wares = getWares();
-//        Level level = event.getPlayer().getLevel();
-//        BlockPos playerPos = event.getPlayer().blockPosition();
+//        try{
+//            ItemStack held = event.getItemStack();
+//            Item item = held.getItem();
+//            String stringTag = held.getTag().toString();
 //
-//        Ware ware = wares.get(new Random().nextInt(0, wares.size()));
-//        NonNullList<ItemStack> paymentItemStacks = ware.getPaymentItemStacks();
+//            CompoundTag tagParserTag = TagParser.parseTag(stringTag);
 //
-//        event.getPlayer().sendMessage(new TextComponent(paymentItemStacks.size() + " PaymentItem(s):"), UUID.randomUUID());
+//            ItemStack resurrected = new ItemStack(item);
 //
-//        for (ItemStack stack : paymentItemStacks){
-//            level.addFreshEntity(new ItemEntity(level, playerPos.getX(), playerPos.getY(), playerPos.getZ(), stack));
-//            event.getPlayer().sendMessage(new TextComponent(stack.toString()), UUID.randomUUID());
+//            CompoundTag tagFromString = (CompoundTag)JsonOps.INSTANCE.convertTo(NbtOps.INSTANCE, JsonParser.parseString(stringTag));
+//            resurrected.setTag(tagFromString);
+//
+//            event.getPlayer().getInventory().add(resurrected);
 //        }
+//        catch (Throwable t){
 //
-//        if (ware.experience > 0){
-//            level.addFreshEntity(new ExperienceOrb(level, playerPos.getX(), playerPos.getY(), playerPos.getZ(), ware.experience));
-//            event.getPlayer().sendMessage(new TextComponent(String.format("Dropped %s experience.", ware.experience)), UUID.randomUUID());
 //        }
-//
-//
-//        String json = new Gson().toJson(ware);
-//        Ware deserWare = new Gson().fromJson(json, Ware.class);
-//        LOGGER.info(json);
+    }
+
+    public void onRegisterCommands(RegisterCommandsEvent event){
+        WaresCommand.register(event.getDispatcher());
+
+        ConfigCommand.register(event.getDispatcher());
     }
 }

@@ -29,7 +29,7 @@ public class ShippingCrate {
     public static final Method _containerGetItemsMethod;
 
     static {
-        _containerGetItemsMethod = ObfuscationReflectionHelper.findMethod(RandomizableContainerBlockEntity.class, "m_7086_");
+        _containerGetItemsMethod = ObfuscationReflectionHelper.findMethod(RandomizableContainerBlockEntity.class, "m_7086_"); // getItems
     }
 
     public static void convertToShippingCrate(Level level, BlockPos pos, BlockState clickedBlockState, ItemStack heldItemStack){

@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.setup;
 
 import io.github.mortuusars.wares.content.items.BillOfLadingItem;
-import io.github.mortuusars.wares.content.items.PurchaseOrderItem;
+import io.github.mortuusars.wares.content.items.PurchaseRequestItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
@@ -19,7 +19,7 @@ public class ModItems {
 
 
     public static final RegistryObject<Item> PURCHASE_REQUEST = Registries.ITEMS.register("purchase_request",
-            () -> new PurchaseOrderItem(new Item.Properties().tab(Registries.WARES_CREATIVE_TAB).stacksTo(1)));
+            () -> new PurchaseRequestItem(new Item.Properties().tab(Registries.WARES_CREATIVE_TAB).stacksTo(1)));
 
     public static final RegistryObject<Item> BILL_OF_LADING = Registries.ITEMS.register("bill_of_lading",
             () -> new BillOfLadingItem(new Item.Properties().tab(Registries.WARES_CREATIVE_TAB).stacksTo(1)));
