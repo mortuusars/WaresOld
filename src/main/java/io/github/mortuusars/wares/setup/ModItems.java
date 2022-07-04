@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.setup;
 
-import io.github.mortuusars.wares.content.items.BillOfLadingItem;
-import io.github.mortuusars.wares.content.items.PurchaseRequestItem;
+import io.github.mortuusars.wares.common.items.BillOfLadingItem;
+import io.github.mortuusars.wares.common.items.PurchaseRequestItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;

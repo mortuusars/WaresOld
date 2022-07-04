@@ -11,12 +11,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.Optional;
 
@@ -102,23 +104,33 @@ public class WareUtils {
 
         components.add(new TextComponent("Requested:").withStyle(ChatFormatting.GRAY));
         for (var req : ware.requestedItems){
-            Optional<Item> optionalItem = req.getItem();
-            String langPrefix = "item.";
-            if (optionalItem.isPresent() && optionalItem.get() instanceof BlockItem)
-                langPrefix = "block.";
-            String registryName = req.isTag() ? req.tag :  langPrefix + req.item.replace(':', '.');
-            components.add(new TranslatableComponent(registryName).withStyle(ChatFormatting.DARK_GREEN)
+            BaseComponent name = null;
+            if (req.isTag())
+                name = new TextComponent(req.tag);
+            else {
+                Optional<Item> optionalItem = req.getItem();
+                if (optionalItem.isPresent())
+                    name = (BaseComponent) optionalItem.get().getName(ItemStack.EMPTY);
+                else
+                    name = new TranslatableComponent("gui.unknown_item");
+            }
+            components.add(name.withStyle(ChatFormatting.DARK_GREEN)
                     .append(new TextComponent(" x" + req.getCount())).withStyle(ChatFormatting.DARK_GREEN));
         }
 
         components.add(new TextComponent("Payment:").withStyle(ChatFormatting.GRAY));
         for (var req : ware.paymentItems){
-            Optional<Item> optionalItem = req.getItem();
-            String langPrefix = "item.";
-            if (optionalItem.isPresent() && optionalItem.get() instanceof BlockItem)
-                langPrefix = "block.";
-            String registryName = req.isTag() ? req.tag :  langPrefix + req.item.replace(':', '.');
-            components.add(new TranslatableComponent(registryName).withStyle(ChatFormatting.GREEN)
+            BaseComponent name = null;
+            if (req.isTag())
+                name = new TextComponent(req.tag);
+            else {
+                Optional<Item> optionalItem = req.getItem();
+                if (optionalItem.isPresent())
+                    name = (BaseComponent) optionalItem.get().getName(ItemStack.EMPTY);
+                else
+                    name = new TranslatableComponent("gui.unknown_item");
+            }
+            components.add(name.withStyle(ChatFormatting.GREEN)
                     .append(new TextComponent(" x" + req.getCount())).withStyle(ChatFormatting.GREEN));
         }
 

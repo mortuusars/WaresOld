@@ -1,6 +1,6 @@
-package io.github.mortuusars.wares.content.items;
+package io.github.mortuusars.wares.common.items;
 
-import io.github.mortuusars.wares.content.ShippingCrate;
+import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.setup.ModTags;
@@ -54,6 +54,6 @@ public class BillOfLadingItem extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
+        return InteractionResult.FAIL;
     }
 }

@@ -1,16 +1,13 @@
 package io.github.mortuusars.wares.inventory.menu;
 
-import com.mojang.logging.LogUtils;
-import io.github.mortuusars.wares.client.gui.BillSlot;
-import io.github.mortuusars.wares.client.gui.ShippingCrateSlot;
-import io.github.mortuusars.wares.content.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModContainers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -39,6 +36,8 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
                 addPlayerInventory(_playerInventory, 114);
                 addPlayerHotbar(_playerInventory, 172);
             });
+
+        _blockEntity.startOpen(playerInventory.player);
     }
 
     public ShippingCrateBlockEntity getBlockEntity(){
@@ -61,11 +60,50 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
-        ItemStack itemStack = ItemStack.EMPTY;
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+//        Slot slot = this.slots.get(index);
+//        if (slot.hasItem()) {
+//            ItemStack stack = slot.getItem();
+//            itemstack = stack.copy();
+//            if (index == 0) {
+//                if (!this.moveItemStackTo(stack, 1, 37, true)) {
+//                    return ItemStack.EMPTY;
+//                }
+//                slot.onQuickCraft(stack, itemstack);
+//            } else {
+//                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
+//                    if (!this.moveItemStackTo(stack, 0, 1, false)) {
+//                        return ItemStack.EMPTY;
+//                    }
+//                } else if (index < 28) {
+//                    if (!this.moveItemStackTo(stack, 28, 37, false)) {
+//                        return ItemStack.EMPTY;
+//                    }
+//                } else if (index < 37 && !this.moveItemStackTo(stack, 1, 28, false)) {
+//                    return ItemStack.EMPTY;
+//                }
+//            }
+//
+//            if (stack.isEmpty()) {
+//                slot.set(ItemStack.EMPTY);
+//            } else {
+//                slot.setChanged();
+//            }
+//
+//            if (stack.getCount() == itemstack.getCount()) {
+//                return ItemStack.EMPTY;
+//            }
+//
+//            slot.onTake(playerIn, stack);
+//        }
 
-        LogUtils.getLogger().error("Not implemented!");
+        return itemstack;
+    }
 
-        return itemStack;
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        this._blockEntity.stopOpen(player);
     }
 }

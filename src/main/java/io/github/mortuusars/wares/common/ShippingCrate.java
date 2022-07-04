@@ -1,20 +1,19 @@
-package io.github.mortuusars.wares.content;
+package io.github.mortuusars.wares.common;
 
 import com.mojang.logging.LogUtils;
+import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.setup.ModBlocks;
+import io.github.mortuusars.wares.setup.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -34,90 +33,79 @@ public class ShippingCrate {
 
     public static void convertToShippingCrate(Level level, BlockPos pos, BlockState clickedBlockState, ItemStack heldItemStack){
 
+        if (!heldItemStack.is(ModItems.BILL_OF_LADING.get()))
+            throw new IllegalArgumentException("heldItemStack should be 'wares:bill_of_lading'. Value: " + heldItemStack.getItem().getRegistryName());
+
         if (level.isClientSide){
+            //TODO sound
             spawnConvertedParticles(level, pos);
             return;
         }
 
         NonNullList<ItemStack> oldItems = NonNullList.create();
-        NonNullList<ItemStack> itemsToDrop =  NonNullList.create();
 
         BlockEntity oldBlockEntity = level.getBlockEntity(pos);
-        if (oldBlockEntity != null) {
-            oldItems = getOldBlockEntityItems(oldBlockEntity);
-
-            if (oldItems.size() > 26)
-                itemsToDrop.addAll(oldItems.subList(26, oldItems.size()));
-        }
+        if (oldBlockEntity != null)
+            oldItems = getBlockEntityItemStacks(oldBlockEntity);
 
         level.removeBlockEntity(pos);
+        level.removeBlock(pos, false);
 
         Block newBlock = ModBlocks.SHIPPING_CRATE.get();
-        BlockState newBlockState = newBlock.defaultBlockState();
+        BlockState newBlockState = newBlock.withPropertiesOf(clickedBlockState);
 
         level.setBlock(pos, newBlockState, Block.UPDATE_ALL);
 
-        BlockEntity newEntity = level.getBlockEntity(pos);
-        if (newEntity == null){
-            itemsToDrop = oldItems;
-            LogUtils.getLogger().error("ShippingCrate block entity was not created.");
-        }
-        else {
+        if (level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
+            shippingCrateEntity.setBillStack(heldItemStack);
 
-            LazyOptional<IItemHandler> itemHandlerCap = newEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-            if (itemHandlerCap.isPresent()){
-                IItemHandler itemHandler = itemHandlerCap.resolve().get();
-                for (int i = 0; i < Math.min(oldItems.size(), 27); i++) {
-                    itemHandler.insertItem(i, oldItems.get(i), false);
-                }
+            // Transfer previous block's items to new container:
+            for (int i = 0; i < Math.min(oldItems.size(), ShippingCrateBlockEntity.SLOTS); i++) {
+                if (i == ShippingCrateBlockEntity.BILL_SLOT_INDEX)
+                    continue;
+
+                shippingCrateEntity.setItem(i, oldItems.get(i));
+                oldItems.set(i, ItemStack.EMPTY);
             }
-            else
-                itemsToDrop = oldItems;
         }
+        else
+            LogUtils.getLogger().error("Conversion failed: blockEntity at '{}' is not ShippingCrateBlockEntity.", pos);
 
-        dropItems(itemsToDrop, level, pos);
-    }
-
-    private static void dropItems(NonNullList<ItemStack> items, Level level, BlockPos pos){
-        double x = pos.getX() + 0.5f;
-        double y = pos.getY() + 0.5f;
-        double z = pos.getZ() + 0.5f;
-        for (ItemStack excessItemStack : items) {
-            level.addFreshEntity(new ItemEntity(level, x, y, z, excessItemStack));
-        }
+        for (ItemStack itemStack : oldItems)
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
     }
 
     @SuppressWarnings("unchecked")
-    private static NonNullList<ItemStack> getOldBlockEntityItems(BlockEntity blockEntity) {
-        NonNullList<ItemStack> oldItems = NonNullList.create();
+    private static NonNullList<ItemStack> getBlockEntityItemStacks(BlockEntity blockEntity) {
+        NonNullList<ItemStack> stacks = NonNullList.create();
         Optional<IItemHandler> itemHandlerOptional = blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve();
 
         if (itemHandlerOptional.isPresent()) {
             IItemHandler handler = itemHandlerOptional.get();
             IntStream.range(0, handler.getSlots())
                     .mapToObj(handler::getStackInSlot)
-                    .forEach(oldItems::add);
+                    .forEach(stacks::add);
         } else {
             if (blockEntity instanceof RandomizableContainerBlockEntity container) {
                 try {
-                    oldItems.addAll((Collection<? extends ItemStack>) _containerGetItemsMethod.invoke(container));
+                    stacks.addAll((Collection<? extends ItemStack>) _containerGetItemsMethod.invoke(container));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     LogUtils.getLogger().error("Cannot invoke 'm_7086_ - getItems' method using reflection.\n" + e);
                 }
             }
         }
 
-        return oldItems;
+        return stacks;
     }
 
     private static void spawnConvertedParticles(Level level, BlockPos pos){
         Random r = level.getRandom();
-        for (int i = 0; i < 20; i++) {
-            double x = pos.getX() + 0.5d + r.nextFloat(-0.4f, 0.4f);
-            double y = pos.getY() + 0.5d + r.nextFloat(-0.4f, 0.4f);
-            double z = pos.getZ() + 0.5d + r.nextFloat(-0.4f, 0.4f);
-            double velocity = r.nextFloat(-0.1f, 0.1f);
-            level.addParticle(ParticleTypes.POOF, x, y, z, velocity, 0.01d, velocity);
+        for (int i = 0; i < 30; i++) {
+            double x = pos.getX() + 0.5d + r.nextFloat(-0.7f, 0.7f);
+            double y = pos.getY() + 0.8d + r.nextFloat(-0.7f, 0.7f);
+            double z = pos.getZ() + 0.5d + r.nextFloat(-0.7f, 0.7f);
+            double velocity = r.nextFloat(-0.05f, 0.05f);
+            level.addParticle(ParticleTypes.POOF, x, y, z, velocity, velocity + 0.05, velocity);
         }
     }
 }

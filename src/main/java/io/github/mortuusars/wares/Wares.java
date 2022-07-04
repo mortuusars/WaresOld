@@ -13,6 +13,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -40,12 +41,6 @@ public class Wares
 
         // TODO proper ware loading and reloading
         WARE_STORAGE.loadWares();
-    }
-
-    public static NonNullList<PotentialWare> getWares(){
-        NonNullList<PotentialWare> wares = NonNullList.create();
-        wares.add(new PotentialWare());
-        return wares;
     }
 
     public void onPlayerRightClick(PlayerInteractEvent event){

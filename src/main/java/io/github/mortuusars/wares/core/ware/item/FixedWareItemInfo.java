@@ -5,9 +5,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.logging.LogUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
@@ -25,6 +27,31 @@ public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
         return this;
     }
 
+    public boolean matches(ItemStack stack){
+        String stackItemRegistryName = Objects.requireNonNull(stack.getItem().getRegistryName()).toString();
+
+        if (this.isTag()){
+            Optional<TagKey<Item>> requestedItemTag = this.getTag();
+            if (requestedItemTag.isPresent() && stack.is(requestedItemTag.get())){
+                return this.count >= stack.getCount(); // No need to check for other properties if requested is a tag.
+            }
+        }
+        else if (!stackItemRegistryName.equals(this.item)){
+            return false;
+        }
+
+        Optional<ItemStack> requestedStackOptional = this.toItemStack();
+        if (requestedStackOptional.isEmpty())
+            return false;
+
+        ItemStack requestedStack = requestedStackOptional.get();
+
+        boolean nbtMatches = this.ignoreNbt || ItemStack.tagMatches(stack, requestedStack);
+        boolean damageMatches = this.ignoreDamage || !stack.isDamaged();
+
+        return nbtMatches && damageMatches;
+    }
+
     public Optional<ItemStack> toItemStack() {
         Optional<Item> itemOpt = getItem();
         if (itemOpt.isEmpty())
@@ -38,7 +65,7 @@ public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
                 stack.setTag(TagParser.parseTag(tag));
             }
             catch (CommandSyntaxException e) {
-                LogUtils.getLogger().warn("Failed to deserialize NBTTag from string: {}.", e.getMessage());
+                LogUtils.getLogger().warn("Failed to deserialize NBTTag from string: {}\nWareItemInfo: {}.", e.getMessage(), this);
                 e.printStackTrace();
             }
         }

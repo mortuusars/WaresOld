@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.content.blocks;
+package io.github.mortuusars.wares.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

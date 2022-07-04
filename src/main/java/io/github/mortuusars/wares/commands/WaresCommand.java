@@ -3,6 +3,7 @@ package io.github.mortuusars.wares.commands;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.logging.LogUtils;
 import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.core.ware.PotentialWare;
 import io.github.mortuusars.wares.core.ware.Ware;
@@ -13,6 +14,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import org.slf4j.Logger;
 
 import java.util.Optional;
 
@@ -44,8 +46,35 @@ public class WaresCommand {
 
     private static int showAllWares(CommandSourceStack source){
         ImmutableList<PotentialWare> wares = Wares.WARE_STORAGE.getAllWares();
-        source.sendSuccess(new TextComponent( wares.size() + " wares is currently loaded."), true);
+        source.sendSuccess(new TextComponent( wares.size() + " ware(s) are currently loaded."), true);
         source.sendSuccess(new TextComponent( "Details are printed in log."), true);
+
+        Logger logger = LogUtils.getLogger();
+        logger.info("Loaded wares:");
+        for (PotentialWare ware : wares) {
+            var sb = new StringBuilder();
+            if (ware.title != null) sb.append("Title: ").append(ware.title).append("\n");
+            if (ware.description != null) sb.append("Description: ").append(ware.description).append("\n");
+            if (ware.seller != null) sb.append("Seller: ").append(ware.seller).append("\n");
+            sb.append("Rarity: ").append(ware.rarity).append("\n");
+            sb.append("Weight: ").append(ware.weight).append("\n");
+
+            sb.append("Requested Items: ");
+            if (ware.requestedItems.size() == 0) sb.append("<-no items->\n");
+            for (var item : ware.requestedItems)
+                sb.append(item.toString());
+
+            sb.append("Payment Items: ");
+            if (ware.paymentItems.size() == 0) sb.append("<-no items->\n");
+            for (var item : ware.paymentItems)
+                sb.append(item.toString());
+
+            sb.append("Experience: min: ").append(ware.experienceMin).append(", max: ").append(ware.experienceMax).append("\n");
+            sb.append("Experience: min: ").append(ware.experienceMin).append(", max: ").append(ware.experienceMax).append("\n");
+
+            logger.info(sb.toString());
+        }
+
         return 0;
     }
 

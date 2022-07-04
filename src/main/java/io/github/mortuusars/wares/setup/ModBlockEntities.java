@@ -1,6 +1,6 @@
 package io.github.mortuusars.wares.setup;
 
-import io.github.mortuusars.wares.content.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
 

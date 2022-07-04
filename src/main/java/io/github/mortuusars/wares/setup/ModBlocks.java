@@ -1,8 +1,8 @@
 package io.github.mortuusars.wares.setup;
 
-import io.github.mortuusars.wares.content.blocks.CrateBlock;
-import io.github.mortuusars.wares.content.blocks.DeliveryTableBlock;
-import io.github.mortuusars.wares.content.blocks.ShippingCrateBlock;
+import io.github.mortuusars.wares.common.blocks.CrateBlock;
+import io.github.mortuusars.wares.common.blocks.DeliveryTableBlock;
+import io.github.mortuusars.wares.common.blocks.ShippingCrateBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
