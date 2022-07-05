@@ -15,10 +15,8 @@ import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import java.util.Optional;
 
@@ -81,7 +79,8 @@ public class WareUtils {
 
     public static Optional<Ware> deserialize(String json){
         try {
-            return Optional.of(WARE_GSON.fromJson(json, Ware.class));
+            Ware value = WARE_GSON.fromJson(json, Ware.class);
+            return value != null ? Optional.of(value) : Optional.empty();
         }
         catch (JsonSyntaxException ex){
             LogUtils.getLogger().error("Failed to deserialize Ware from json:\nJson string:'{}'\nException: {}", json, ex);
@@ -98,9 +97,9 @@ public class WareUtils {
         if (!Strings.isNullOrEmpty(ware.description))
             components.add(new TextComponent(ware.description).withStyle(ChatFormatting.GRAY));
 
-        if (!Strings.isNullOrEmpty(ware.seller))
+        if (!Strings.isNullOrEmpty(ware.buyer))
             components.add(new TextComponent("Seller: ").withStyle(ChatFormatting.DARK_GRAY)
-                    .append(new TextComponent(ware.seller).withStyle(ChatFormatting.GRAY)));
+                    .append(new TextComponent(ware.buyer).withStyle(ChatFormatting.GRAY)));
 
         components.add(new TextComponent("Requested:").withStyle(ChatFormatting.GRAY));
         for (var req : ware.requestedItems){

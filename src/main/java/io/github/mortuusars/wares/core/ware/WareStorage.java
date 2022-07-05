@@ -51,7 +51,10 @@ public class WareStorage {
                 .weight(4f)
                 .rarity(Rarity.RARE)
                 .addRequestedItem(new PotentialWareItemInfo().item("minecraft:anvil").countRange(8, 12))
-                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:iron_ingot").countRange(28, 32)));
+                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:iron_ingot").countRange(28, 32))
+                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:apple").countRange(28, 32))
+                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:book").countRange(28, 32))
+                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:chain").countRange(28, 32)));
 
         newWares.add(new PotentialWare()
                 .title("Title 4")
@@ -61,7 +64,10 @@ public class WareStorage {
                 .addRequestedItem(new PotentialWareItemInfo().item("minecraft:grindstone").count(1))
                 .addPaymentItem(new PotentialWareItemInfo().item("minecraft:leather").countRange(4, 6)));
 
+        for (int i = 0; i < 16; i++) {
+            newWares.get(2).addPaymentItem(new PotentialWareItemInfo().item("minecraft:gold_ingot").count(13));
+        }
+
         _wares = newWares;
     }
-
 }

@@ -6,20 +6,29 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Ware {
     public String title = "";
     public String description = "";
-    public String seller = "";
+    public String buyer = "";
     public int experience = 0;
     public List<FixedWareItemInfo> requestedItems = Collections.emptyList();
     public List<FixedWareItemInfo> paymentItems = Collections.emptyList();
 
+    public Optional<FixedWareItemInfo> getMatchingRequestedItem(ItemStack stack){
+        for (var reqItem : requestedItems){
+            if (reqItem.matches(stack))
+                return Optional.of(reqItem);
+        }
+
+        return Optional.empty();
+    }
 
     public NonNullList<ItemStack> getPaymentStacks(){
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (var item : paymentItems)
-            item.toItemStack().ifPresent(stacks::add);
+            stacks.add(item.toItemStack());
         return stacks;
     }
 
@@ -34,8 +43,8 @@ public class Ware {
         return this;
     }
 
-    public Ware seller(String seller) {
-        this.seller = seller;
+    public Ware buyer(String buyer) {
+        this.buyer = buyer;
         return this;
     }
 

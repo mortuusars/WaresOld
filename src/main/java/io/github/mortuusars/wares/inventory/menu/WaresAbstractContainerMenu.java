@@ -22,9 +22,13 @@ public abstract class WaresAbstractContainerMenu extends AbstractContainerMenu {
         for (int row = 0; row < 3; row++){
             for (int column = 0; column < 9; column++){
                 addSlot(new Slot(playerInventory,
-                        startIndex + (column + row * 9 + 9), xPosition + column * slotSize, yPosition + row * slotSize));
+                        startIndex + (column + row * 9), xPosition + column * slotSize, yPosition + row * slotSize));
             }
         }
+    }
+
+    protected void addPlayerInventory(Inventory playerInventory, int startIndex, int xPostition, int yPosition){
+        addPlayerInventory(playerInventory, startIndex, xPostition, yPosition, 18);
     }
 
     protected void addPlayerInventory(Inventory playerInventory, int startIndex, int yPosition){
@@ -43,6 +47,10 @@ public abstract class WaresAbstractContainerMenu extends AbstractContainerMenu {
 
     protected void addPlayerHotbar(Inventory playerInventory, int startIndex, int yPosition){
         addPlayerHotbar(playerInventory, startIndex, 8, yPosition, 18);
+    }
+
+    protected void addPlayerHotbar(Inventory playerInventory, int startIndex, int xPosition, int yPosition){
+        addPlayerHotbar(playerInventory, startIndex, xPosition, yPosition, 18);
     }
 
     protected void addPlayerHotbar(Inventory playerInventory, int yPosition){

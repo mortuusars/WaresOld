@@ -40,11 +40,7 @@ public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
             return false;
         }
 
-        Optional<ItemStack> requestedStackOptional = this.toItemStack();
-        if (requestedStackOptional.isEmpty())
-            return false;
-
-        ItemStack requestedStack = requestedStackOptional.get();
+        ItemStack requestedStack = this.toItemStack();
 
         boolean nbtMatches = this.ignoreNbt || ItemStack.tagMatches(stack, requestedStack);
         boolean damageMatches = this.ignoreDamage || !stack.isDamaged();
@@ -52,10 +48,10 @@ public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
         return nbtMatches && damageMatches;
     }
 
-    public Optional<ItemStack> toItemStack() {
+    public ItemStack toItemStack() {
         Optional<Item> itemOpt = getItem();
         if (itemOpt.isEmpty())
-            return Optional.empty();
+            return ItemStack.EMPTY;
 
         Item itemType = itemOpt.get();
         ItemStack stack = new ItemStack(itemType, getCount());
@@ -70,7 +66,7 @@ public class FixedWareItemInfo extends WareItemInfo<FixedWareItemInfo> {
             }
         }
 
-        return Optional.of(stack);
+        return stack;
     }
 
     @Override

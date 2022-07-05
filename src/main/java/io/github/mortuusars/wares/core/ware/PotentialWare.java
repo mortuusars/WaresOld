@@ -28,7 +28,7 @@ public class PotentialWare {
         return new Ware()
             .title(title)
             .description(description)
-            .seller(seller)
+            .buyer(seller)
             .experience(getExperience())
             .setRequestedItems(requestedItems.stream().map(PotentialWareItemInfo::toFixed).collect(Collectors.toList()))
             .setPaymentItems(paymentItems.stream().map(PotentialWareItemInfo::toFixed).collect(Collectors.toList()));

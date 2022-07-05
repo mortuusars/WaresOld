@@ -1,13 +1,24 @@
 package io.github.mortuusars.wares.inventory.menu;
 
+import com.mojang.datafixers.util.Pair;
+import io.github.mortuusars.wares.client.gui.BillSlot;
+import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.WareUtils;
+import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModContainers;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -15,40 +26,63 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class ShippingCrateMenu extends WaresAbstractContainerMenu {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
-    private final ShippingCrateBlockEntity _blockEntity;
-    private final Level _level;
-    private final Inventory _playerInventory;
+public class ShippingCrateMenu extends WaresAbstractContainerMenu {
+    private final ShippingCrateBlockEntity blockEntity;
+    private final Level level;
+    private final Inventory playerInventory;
+
+    public NonNullList<ItemStack> paymentItems;
+
+    public Ware ware;
 
     public ShippingCrateMenu(int pContainerId, Inventory playerInventory, BlockPos pos) {
         super(ModContainers.SHIPPING_CRATE.get(), pContainerId);
-        _level = playerInventory.player.getLevel();
-        _blockEntity = (ShippingCrateBlockEntity)_level.getBlockEntity(pos);
-        _playerInventory = playerInventory;
+        level = playerInventory.player.getLevel();
+        blockEntity = (ShippingCrateBlockEntity) level.getBlockEntity(pos);
+        this.playerInventory = playerInventory;
 
-        if (_blockEntity == null)
+
+        if (blockEntity == null)
             return;
 
-        _blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(
+        blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(
             handler -> {
-                addContentSlots(handler, 0,44);
-                addPlayerInventory(_playerInventory, 114);
-                addPlayerHotbar(_playerInventory, 172);
+                addContainerSlots(handler, 0,18);
+                addSlot(new SlotItemHandler(handler, ShippingCrate.BILL_SLOT_INDEX, 124, 36){
+                    @Override
+                    public boolean mayPlace(@NotNull ItemStack stack) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean mayPickup(Player playerIn) {
+                        return false;
+                    }
+                });
+                addPlayerInventory(this.playerInventory, 9, 26, 131);
+                addPlayerHotbar(this.playerInventory, 0, 26, 189);
             });
 
-        _blockEntity.startOpen(playerInventory.player);
+        WareUtils.readWareFromStackNBT(this.slots.get(ShippingCrate.BILL_SLOT_INDEX).getItem()).ifPresent(w -> ware = w);
+        paymentItems = blockEntity.getPaymentItems();
+
+        blockEntity.startOpen(playerInventory.player);
     }
 
     public ShippingCrateBlockEntity getBlockEntity(){
-        return _blockEntity;
+        return blockEntity;
     }
 
-    private void addContentSlots(IItemHandler handler, int startIndex, int yPos) {
-
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++){
-                addSlot(new SlotItemHandler(handler,column + row * 9 + startIndex, 8 + column * 18, yPos + row * 18));
+    private void addContainerSlots(IItemHandler handler, int startIndex, int yPos) {
+        int index = startIndex;
+        for (int row = 0; row < 5; row++) {
+            for (int column = 0; column < 6; column++){
+                addSlot(new SlotItemHandler(handler, index++, 8 + column * 18, yPos + row * 18));
             }
         }
     }
@@ -56,54 +90,77 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
     @Override
     public boolean stillValid(@NotNull Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(pPlayer.getLevel(),
-                _blockEntity.getBlockPos()), pPlayer, ModBlocks.SHIPPING_CRATE.get());
+                blockEntity.getBlockPos()), pPlayer, ModBlocks.SHIPPING_CRATE.get());
+    }
+
+    @Override
+    public boolean clickMenuButton(Player player, int elementID) {
+        if (elementID == ShippingCrateScreen.PROGRESS_ARROW_ID){
+            blockEntity.shipWare(player);
+        }
+
+        return true;
     }
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-//        Slot slot = this.slots.get(index);
-//        if (slot.hasItem()) {
-//            ItemStack stack = slot.getItem();
-//            itemstack = stack.copy();
-//            if (index == 0) {
-//                if (!this.moveItemStackTo(stack, 1, 37, true)) {
-//                    return ItemStack.EMPTY;
-//                }
-//                slot.onQuickCraft(stack, itemstack);
-//            } else {
-//                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
-//                    if (!this.moveItemStackTo(stack, 0, 1, false)) {
-//                        return ItemStack.EMPTY;
-//                    }
-//                } else if (index < 28) {
-//                    if (!this.moveItemStackTo(stack, 28, 37, false)) {
-//                        return ItemStack.EMPTY;
-//                    }
-//                } else if (index < 37 && !this.moveItemStackTo(stack, 1, 28, false)) {
-//                    return ItemStack.EMPTY;
-//                }
-//            }
-//
-//            if (stack.isEmpty()) {
-//                slot.set(ItemStack.EMPTY);
-//            } else {
-//                slot.setChanged();
-//            }
-//
-//            if (stack.getCount() == itemstack.getCount()) {
-//                return ItemStack.EMPTY;
-//            }
-//
-//            slot.onTake(playerIn, stack);
-//        }
+        Slot slot = this.slots.get(index);
+        if (slot.hasItem()) {
+            ItemStack slotItemStack = slot.getItem();
+            itemstack = slotItemStack.copy();
+            if (index < ShippingCrate.ITEM_SLOTS){
+                if (!this.moveItemStackTo(slotItemStack, ShippingCrate.ITEM_SLOTS, this.slots.size(), true))
+                    return ItemStack.EMPTY;
+            }
+            else if (!this.moveItemStackTo(slotItemStack, 0, ShippingCrate.ITEM_SLOTS, false))
+                return ItemStack.EMPTY;
+
+
+            if (slotItemStack.isEmpty())
+                slot.set(ItemStack.EMPTY);
+            else
+                slot.setChanged();
+        }
 
         return itemstack;
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
-        this._blockEntity.stopOpen(player);
+        this.blockEntity.stopOpen(player);
+    }
+
+    public Pair<Integer, Integer> getProgress(){
+        Slot slot = slots.get(ShippingCrate.BILL_SLOT_INDEX);
+        ItemStack billStack = slot.getItem();
+        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(billStack);
+        if(wareOptional.isPresent()){
+            Ware ware = wareOptional.get();
+
+            Map<FixedWareItemInfo, Integer> requested = new HashMap<>();
+            int requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
+            for (int i = 0; i < ShippingCrate.ITEM_SLOTS; i++) {
+                ItemStack stack = this.slots.get(i).getItem();
+                ware.getMatchingRequestedItem(stack).ifPresent(item -> {
+                    if (requested.containsKey(item)){
+                        int newCount = requested.get(item) + stack.getCount();
+                        requested.put(item, newCount);
+                    }
+                    else {
+                        requested.put(item, stack.getCount());
+                    }
+                });
+            }
+
+            int currentCount = 0;
+            for (var reqItem : requested.entrySet())
+                currentCount += Math.min(reqItem.getKey().count, reqItem.getValue());
+
+            return Pair.of(requestedCount, currentCount);
+        }
+
+        return Pair.of(0, 0);
     }
 }

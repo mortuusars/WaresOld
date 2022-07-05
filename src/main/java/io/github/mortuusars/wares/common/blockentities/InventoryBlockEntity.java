@@ -10,21 +10,17 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openjdk.nashorn.internal.runtime.regexp.joni.SearchAlgorithm;
 
 import java.util.stream.IntStream;
 
@@ -43,7 +39,7 @@ public abstract class InventoryBlockEntity extends BlockEntity implements Contai
         Preconditions.checkArgument(slots > 0, "slot count should be larger than 0. Value: {}", slots);
         this.slots = slots;
 
-        inventory = createInventory();
+        inventory = createInventory(slots);
         inventoryHandlerLazy = LazyOptional.of(() -> this.inventory);
     }
 
@@ -189,7 +185,7 @@ public abstract class InventoryBlockEntity extends BlockEntity implements Contai
         this.inventoryHandlerLazy.invalidate();
     }
 
-    protected @NotNull ItemStackHandler createInventory() {
-        return new ItemStackHandler(this.slots);
+    protected @NotNull ItemStackHandler createInventory(int slots) {
+        return new ItemStackHandler(slots);
     }
 }
