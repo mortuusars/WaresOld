@@ -55,7 +55,7 @@ public class WaresCommand {
             var sb = new StringBuilder();
             if (ware.title != null) sb.append("Title: ").append(ware.title).append("\n");
             if (ware.description != null) sb.append("Description: ").append(ware.description).append("\n");
-            if (ware.seller != null) sb.append("Seller: ").append(ware.seller).append("\n");
+            if (ware.buyer != null) sb.append("Seller: ").append(ware.buyer).append("\n");
             sb.append("Rarity: ").append(ware.rarity).append("\n");
             sb.append("Weight: ").append(ware.weight).append("\n");
 
@@ -69,8 +69,7 @@ public class WaresCommand {
             for (var item : ware.paymentItems)
                 sb.append(item.toString());
 
-            sb.append("Experience: min: ").append(ware.experienceMin).append(", max: ").append(ware.experienceMax).append("\n");
-            sb.append("Experience: min: ").append(ware.experienceMin).append(", max: ").append(ware.experienceMax).append("\n");
+            sb.append("Experience: ").append(ware.experience).append("\n");
 
             logger.info(sb.toString());
         }

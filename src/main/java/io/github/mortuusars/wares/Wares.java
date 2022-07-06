@@ -8,8 +8,10 @@ import io.github.mortuusars.wares.core.ware.PotentialWare;
 import io.github.mortuusars.wares.core.ware.WareStorage;
 import io.github.mortuusars.wares.setup.ClientSetup;
 import io.github.mortuusars.wares.setup.Registries;
+import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.*;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,12 +47,21 @@ public class Wares
 
     public void onPlayerRightClick(PlayerInteractEvent event){
 
-//        if (event.getWorld().isClientSide)
-//            return;
-//
-//        if (event.getHand() == InteractionHand.OFF_HAND)
-//            return;
-//
+        if (event.getWorld().isClientSide)
+            return;
+
+
+        if (event.getHand() == InteractionHand.OFF_HAND)
+            return;
+
+//        event.getPlayer().sendMessage(new TextComponent(
+//                "getDayTime: " + event.getWorld().getDayTime() +
+//                      " dayTime: " + event.getWorld().dayTime() +
+//                      " getTimeOfDay: " + event.getWorld().getTimeOfDay(0f) +
+//                      " getGameTime" + event.getWorld().getGameTime()), Util.NIL_UUID);
+
+//        event.getPlayer().sendMessage(new TextComponent("Time: " + event.getWorld().getDayTime() % 24000L), Util.NIL_UUID);
+
 //        try{
 //            ItemStack held = event.getItemStack();
 //            Item item = held.getItem();

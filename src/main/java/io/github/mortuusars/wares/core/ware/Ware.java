@@ -1,6 +1,7 @@
 package io.github.mortuusars.wares.core.ware;
 
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
+import io.github.mortuusars.wares.types.IntRange;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 
@@ -13,6 +14,8 @@ public class Ware {
     public String description = "";
     public String buyer = "";
     public int experience = 0;
+    public IntRange deliveryTime = IntRange.ZERO;
+    public int deliveryDays = 0;
     public List<FixedWareItemInfo> requestedItems = Collections.emptyList();
     public List<FixedWareItemInfo> paymentItems = Collections.emptyList();
 
@@ -50,6 +53,16 @@ public class Ware {
 
     public Ware experience(int experience) {
         this.experience = experience;
+        return this;
+    }
+
+    public Ware deliveryTimeRange(int min, int max){
+        this.deliveryTime = new io.github.mortuusars.wares.types.IntRange(min, max);
+        return this;
+    }
+
+    public Ware deliveryDays(int days){
+        this.deliveryDays = days;
         return this;
     }
 

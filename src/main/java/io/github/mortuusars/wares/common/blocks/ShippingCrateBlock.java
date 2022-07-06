@@ -65,12 +65,4 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
 
         super.onRemove(oldBlockState, level, pos, newBlockState, isMoving);
     }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        if (!level.isClientSide)
-            return blockEntityType == ModBlockEntities.SHIPPING_CRATE_BLOCK_ENTITY.get() ? ShippingCrateBlockEntity::tick : null;
-        return null;
-    }
 }

@@ -2,11 +2,12 @@ package io.github.mortuusars.wares.common.blockentities;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
+import io.github.mortuusars.wares.WareProgression;
 import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
-import io.github.mortuusars.wares.inventory.menu.ShippingCrateMenu;
+import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
 import io.github.mortuusars.wares.setup.ModItems;
 import io.github.mortuusars.wares.utils.PosUtils;
@@ -36,12 +37,10 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("NullableProblems")
 public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider {
@@ -164,53 +163,6 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
             progress = Math.min(1f, requestedCount / (float)currentCount);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T blockEntity) {
-//        if (!(blockEntity instanceof ShippingCrateBlockEntity shippingCrateEntity))
-//            return;
-//
-//        Ware ware = shippingCrateEntity.getWare();
-//        if (ware == null)
-//            return;
-//
-//        Map<FixedWareItemInfo, AtomicInteger> items = new HashMap<>();
-//
-//        for (var item : ware.requestedItems)
-//            items.put(item, new AtomicInteger(0));
-//
-//        for (int i = 0; i < shippingCrateEntity._itemStackHandler.getSlots(); i++) {
-//            for (var reqItem : ware.requestedItems){
-//                ItemStack stack = shippingCrateEntity._itemStackHandler.getStackInSlot(i);
-//                if (reqItem.matches(stack)){
-//                    items.get(reqItem).getAndUpdate(count -> count + stack.getCount());
-//                }
-//            }
-//        }
-//
-//        for (var reqItem2 : ware.requestedItems){
-//            if (reqItem2.getCount() > items.get(reqItem2).get())
-//                return;
-//        }
-//
-//
-////        for (int i = 0; i < shippingCrateEntity._itemStackHandler.getSlots(); i++) {
-////            shippingCrateEntity._itemStackHandler.setStackInSlot(i, ItemStack.EMPTY);
-////        }
-//        level.removeBlockEntity(blockPos);
-//        level.removeBlock(blockPos, false);
-//
-//        double x = blockPos.getX() + 0.5;
-//        double y = blockPos.getY() + 0.5;
-//        double z = blockPos.getZ() + 0.5;
-//
-//        for (var paymentItem : ware.paymentItems){
-//            Optional<ItemStack> itemStack = paymentItem.toItemStack();
-//            itemStack.ifPresent(stack -> {
-//                level.addFreshEntity(new ItemEntity(level, x, y, z, stack));
-//            });
-//        }
-
-    }
-
     @Override
     public @NotNull Component getDisplayName() {
         return new TranslatableComponent("container.shipping_crate");
@@ -275,12 +227,7 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
         ShippingCrate.Shipping shippingResult = ShippingCrate.getShippingResult(ware, this.getItems());
         if (shippingResult.isFulfilled()){
             this.clearContent();
-            Container paymentItemsContainer = new SimpleContainer(shippingResult.paymentItems.toArray(new ItemStack[0]));
-            Containers.dropContents(level, worldPosition, paymentItemsContainer);
-            level.removeBlock(this.worldPosition, false);
-
-            Vector3f pos = PosUtils.blockCenter(worldPosition);
-            level.playSound(player, pos.x(), pos.y(), pos.z(), SoundEvents.SCAFFOLDING_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
+            WareProgression.shipWare(ware, player, level, this.worldPosition, shippingResult);
         }
     }
 }

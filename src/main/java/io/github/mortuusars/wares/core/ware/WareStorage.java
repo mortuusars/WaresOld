@@ -2,8 +2,6 @@ package io.github.mortuusars.wares.core.ware;
 
 import com.google.common.collect.ImmutableList;
 import io.github.mortuusars.wares.core.Rarity;
-import io.github.mortuusars.wares.core.ware.PotentialWare;
-import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.item.PotentialWareItemInfo;
 import net.minecraft.core.NonNullList;
 
@@ -37,7 +35,7 @@ public class WareStorage {
         newWares.add(new PotentialWare()
                 .title("Title 1")
                 .description("Ware description example")
-                .seller("Edward Largenose")
+                .buyer("Edward Largenose")
                 .experience(4)
                 .weight(2f)
                 .rarity(Rarity.UNCOMMON)

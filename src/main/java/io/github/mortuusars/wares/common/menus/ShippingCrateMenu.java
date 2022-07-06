@@ -1,7 +1,6 @@
-package io.github.mortuusars.wares.inventory.menu;
+package io.github.mortuusars.wares.common.menus;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.mortuusars.wares.client.gui.BillSlot;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
 import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
@@ -10,14 +9,11 @@ import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModContainers;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -29,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class ShippingCrateMenu extends WaresAbstractContainerMenu {
     private final ShippingCrateBlockEntity blockEntity;

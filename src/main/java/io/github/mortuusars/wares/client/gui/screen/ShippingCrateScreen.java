@@ -6,17 +6,13 @@ import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.MorePaymentItemsElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentItemElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShipmentProgressArrowElement;
-import io.github.mortuusars.wares.inventory.menu.ShippingCrateMenu;
+import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> {
 

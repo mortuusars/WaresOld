@@ -1,6 +1,7 @@
 package io.github.mortuusars.wares.setup;
 
 import io.github.mortuusars.wares.common.blocks.CrateBlock;
+import io.github.mortuusars.wares.common.blocks.DeliveryNoteBlock;
 import io.github.mortuusars.wares.common.blocks.DeliveryTableBlock;
 import io.github.mortuusars.wares.common.blocks.ShippingCrateBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -17,7 +18,10 @@ public class ModBlocks {
             () -> new CrateBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.LADDER)));
 
     public static final RegistryObject<ShippingCrateBlock> SHIPPING_CRATE = Registries.BLOCKS.register("shipping_crate",
-            () -> new ShippingCrateBlock(BlockBehaviour.Properties.of(Material.WOOD)));
+            () -> new ShippingCrateBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.LADDER)));
+
+    public static final RegistryObject<DeliveryNoteBlock> DELIVERY_NOTE = Registries.BLOCKS.register("delivery_note",
+            () -> new DeliveryNoteBlock(BlockBehaviour.Properties.of(Material.AIR).sound(SoundType.SPORE_BLOSSOM)));
 
     public static void register() { }
 }

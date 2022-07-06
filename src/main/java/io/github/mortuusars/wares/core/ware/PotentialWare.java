@@ -3,6 +3,7 @@ package io.github.mortuusars.wares.core.ware;
 import com.google.common.base.Preconditions;
 import io.github.mortuusars.wares.core.Rarity;
 import io.github.mortuusars.wares.core.ware.item.PotentialWareItemInfo;
+import io.github.mortuusars.wares.types.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,26 +17,31 @@ import java.util.stream.Collectors;
 public class PotentialWare {
     public String title = "";
     public String description = "";
-    public String seller = "";
+    public String buyer = "";
     public Rarity rarity = Rarity.COMMON;
     public float weight = 1f;
     public List<PotentialWareItemInfo> requestedItems = new ArrayList<>();
     public List<PotentialWareItemInfo> paymentItems = new ArrayList<>();
-    public int experienceMin = 0;
-    public int experienceMax = 0;
+    public IntRange deliveryTime = IntRange.ZERO;
+    public IntRange deliveryDays = IntRange.ZERO;
+    public IntRange experience = IntRange.ZERO;
 
     public Ware toFixedWare(){
         return new Ware()
             .title(title)
             .description(description)
-            .buyer(seller)
+            .buyer(buyer)
             .experience(getExperience())
             .setRequestedItems(requestedItems.stream().map(PotentialWareItemInfo::toFixed).collect(Collectors.toList()))
             .setPaymentItems(paymentItems.stream().map(PotentialWareItemInfo::toFixed).collect(Collectors.toList()));
     }
 
     public int getExperience(){
-        return new Random().nextInt(experienceMin, ++experienceMax);
+        return experience.getRandom(new Random());
+    }
+
+    public int getExperience(Random random){
+        return experience.getRandom(random);
     }
 
     public PotentialWare title(String title){
@@ -48,8 +54,8 @@ public class PotentialWare {
         return this;
     }
 
-    public PotentialWare seller(String seller){
-        this.seller = seller;
+    public PotentialWare buyer(String buyer){
+        this.buyer = buyer;
         return this;
     }
 
@@ -66,15 +72,22 @@ public class PotentialWare {
     }
 
     public PotentialWare experience(int experience){
-        experienceMin = experience;
-        experienceMax = experience;
+        this.experience = new IntRange(experience, experience);
         return this;
     }
 
     public PotentialWare experienceRange(int min, int max){
-        Preconditions.checkArgument(min <= max, "Experience min value should not be larger than max value.");
-        experienceMin = min;
-        experienceMax = max;
+        this.experience = new IntRange(min, max);
+        return this;
+    }
+
+    public PotentialWare deliveryTimeRange(int min, int max){
+        this.deliveryTime = new IntRange(min, max);
+        return this;
+    }
+
+    public PotentialWare deliveryDaysRange(int min, int max){
+        this.deliveryDays = new IntRange(min, max);
         return this;
     }
 

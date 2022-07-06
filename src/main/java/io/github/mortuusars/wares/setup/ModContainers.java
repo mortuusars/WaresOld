@@ -1,6 +1,6 @@
 package io.github.mortuusars.wares.setup;
 
-import io.github.mortuusars.wares.inventory.menu.ShippingCrateMenu;
+import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.RegistryObject;
