@@ -1,6 +1,7 @@
 package io.github.mortuusars.wares.common.menus;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.mortuusars.wares.client.gui.BillSlot;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
 import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
@@ -9,11 +10,13 @@ import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModContainers;
+import io.github.mortuusars.wares.setup.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -48,23 +51,19 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
         blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(
             handler -> {
                 addContainerSlots(handler, 0,18);
-                addSlot(new SlotItemHandler(handler, ShippingCrate.BILL_SLOT_INDEX, 124, 36){
-                    @Override
-                    public boolean mayPlace(@NotNull ItemStack stack) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean mayPickup(Player playerIn) {
-                        return false;
-                    }
-                });
                 addPlayerInventory(this.playerInventory, 9, 26, 131);
                 addPlayerHotbar(this.playerInventory, 0, 26, 189);
             });
 
-        WareUtils.readWareFromStackNBT(this.slots.get(ShippingCrate.BILL_SLOT_INDEX).getItem()).ifPresent(w -> ware = w);
+
+
+        ware = blockEntity.getWare();
         paymentItems = blockEntity.getPaymentItems();
+
+//        ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
+//        WareUtils.saveToStackNBT(ware, request);
+//
+//        this.setItem(ShippingCrate.SLOTS, 0, request);
 
         blockEntity.startOpen(playerInventory.player);
     }
@@ -104,11 +103,11 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack slotItemStack = slot.getItem();
             itemstack = slotItemStack.copy();
-            if (index < ShippingCrate.ITEM_SLOTS){
-                if (!this.moveItemStackTo(slotItemStack, ShippingCrate.ITEM_SLOTS, this.slots.size(), true))
+            if (index < ShippingCrate.SLOTS){
+                if (!this.moveItemStackTo(slotItemStack, ShippingCrate.SLOTS, this.slots.size(), true))
                     return ItemStack.EMPTY;
             }
-            else if (!this.moveItemStackTo(slotItemStack, 0, ShippingCrate.ITEM_SLOTS, false))
+            else if (!this.moveItemStackTo(slotItemStack, 0, ShippingCrate.SLOTS, false))
                 return ItemStack.EMPTY;
 
 
@@ -128,34 +127,29 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
     }
 
     public Pair<Integer, Integer> getProgress(){
-        Slot slot = slots.get(ShippingCrate.BILL_SLOT_INDEX);
-        ItemStack billStack = slot.getItem();
-        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(billStack);
-        if(wareOptional.isPresent()){
-            Ware ware = wareOptional.get();
+        Ware ware = blockEntity.getWare();
+        if (ware == null)
+            return Pair.of(0,0);
 
-            Map<FixedWareItemInfo, Integer> requested = new HashMap<>();
-            int requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
-            for (int i = 0; i < ShippingCrate.ITEM_SLOTS; i++) {
-                ItemStack stack = this.slots.get(i).getItem();
-                ware.getMatchingRequestedItem(stack).ifPresent(item -> {
-                    if (requested.containsKey(item)){
-                        int newCount = requested.get(item) + stack.getCount();
-                        requested.put(item, newCount);
-                    }
-                    else {
-                        requested.put(item, stack.getCount());
-                    }
-                });
-            }
-
-            int currentCount = 0;
-            for (var reqItem : requested.entrySet())
-                currentCount += Math.min(reqItem.getKey().count, reqItem.getValue());
-
-            return Pair.of(requestedCount, currentCount);
+        Map<FixedWareItemInfo, Integer> requested = new HashMap<>();
+        int requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
+        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
+            ItemStack stack = this.slots.get(i).getItem();
+            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
+                if (requested.containsKey(item)){
+                    int newCount = requested.get(item) + stack.getCount();
+                    requested.put(item, newCount);
+                }
+                else {
+                    requested.put(item, stack.getCount());
+                }
+            });
         }
 
-        return Pair.of(0, 0);
+        int currentCount = 0;
+        for (var reqItem : requested.entrySet())
+            currentCount += Math.min(reqItem.getKey().count, reqItem.getValue());
+
+        return Pair.of(requestedCount, currentCount);
     }
 }

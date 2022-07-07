@@ -1,10 +1,13 @@
 package io.github.mortuusars.wares.common.items;
 
 import com.mojang.logging.LogUtils;
+import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.setup.ModItems;
+import io.github.mortuusars.wares.setup.ModTags;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -20,10 +23,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class PurchaseRequestItem extends Item {
@@ -44,35 +49,30 @@ public class PurchaseRequestItem extends Item {
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         if (!stack.is(this))
-            return InteractionResult.FAIL;
+            return InteractionResult.PASS;
 
+        Level level = context.getLevel();
         Player player = context.getPlayer();
-        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(stack);
+        BlockPos blockPos = context.getClickedPos();
+        BlockState clickedBlockState = level.getBlockState(blockPos);
 
-        if (context.isSecondaryUseActive()){
-            Inventory playerInventory = player.getInventory();
-            if (wareOptional.isEmpty()){
-                player.sendMessage(new TextComponent("This request is invalid."), Util.NIL_UUID);
-                playerInventory.removeItem(stack);
-                return InteractionResult.FAIL;
-            }
+        if (clickedBlockState.is(ModTags.SHIPMENT_CONVERTIBLE)){
+            ShippingCrate.convertToShippingCrate(player, level, blockPos, clickedBlockState, stack);
 
-            int requestSlot = playerInventory.findSlotMatchingItem(stack);
-            ItemStack billStack = new ItemStack(ModItems.BILL_OF_LADING.get());
-            if (WareUtils.saveToStackNBT(wareOptional.get(), billStack)){
-                playerInventory.setItem(requestSlot, billStack);
-                context.getLevel().playSound(player, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.PLAYERS, 0.6f, 1f);
-            }
+            if (player != null && !level.isClientSide && !player.isCreative())
+                stack.shrink(1);
+
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        else if (!context.getLevel().isClientSide)
-            wareOptional.ifPresent(ware -> LogUtils.getLogger().info("Ware:\n{}", ware));
 
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        LogUtils.getLogger().warn("USED");
-        return super.use(pLevel, pPlayer, pUsedHand);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide)
+            player.sendMessage(new TextComponent("ware info here"), Util.NIL_UUID);
+
+        return InteractionResultHolder.sidedSuccess(ItemStack.EMPTY, level.isClientSide);
     }
 }

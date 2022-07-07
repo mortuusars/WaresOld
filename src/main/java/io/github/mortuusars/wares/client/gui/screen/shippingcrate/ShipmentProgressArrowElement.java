@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
 import io.github.mortuusars.wares.common.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.Ware;
 import net.minecraft.ChatFormatting;
@@ -28,11 +29,16 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
     private final static int WIDTH = 23;
     private final static int HEIGHT = 17;
 
-    private Ware ware;
+    private final Ware ware;
 
     public ShipmentProgressArrowElement(ShippingCrateScreen parentScreen, int id, int posX, int posY, Ware ware) {
         super(parentScreen, id, posX, posY, WIDTH, HEIGHT);
         this.ware = ware;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return isProgressFull() ? Cursor.HAND : Cursor.ARROW;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
                         : reqItem.getItem().orElse(Items.AIR).getName(ItemStack.EMPTY);
 
                 int currentCount = 0;
-                for (int i = 0; i < ShippingCrate.ITEM_SLOTS; i++) {
+                for (int i = 0; i < ShippingCrate.SLOTS; i++) {
                     ItemStack stack = screen.getMenu().slots.get(i).getItem();
                     if (reqItem.matches(stack))
                         currentCount += stack.getCount();
@@ -88,11 +94,15 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        Pair<Integer, Integer> progress = screen.getMenu().getProgress();
-        if (progress.getSecond() >= progress.getFirst()){
+        if (isProgressFull()){
             LocalPlayer player = screen.getMinecraft().player;
             player.level.playSound(player, player.position().x, player.position().y, player.position().z, SoundEvents.SCAFFOLDING_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
             screen.getMinecraft().gameMode.handleInventoryButtonClick(screen.getMenu().containerId, id);
         }
+    }
+
+    private boolean isProgressFull(){
+        Pair<Integer, Integer> progress = screen.getMenu().getProgress();
+        return progress.getSecond() >= progress.getFirst();
     }
 }

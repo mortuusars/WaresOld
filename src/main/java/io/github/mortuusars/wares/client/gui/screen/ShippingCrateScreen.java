@@ -5,8 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.MorePaymentItemsElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentItemElement;
+import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentRequestElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShipmentProgressArrowElement;
 import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,8 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Wares.MOD_ID, "textures/gui/shipping_crate.png");
 
     public static final int PROGRESS_ARROW_ID = 0;
+    public static final int PURCHASE_REQUEST_ID = 1;
+    public static final int PAYMENT_ITEMS_START_ID = 2;
 
     private static final int PAYMENT_ITEMS_START_X = 150;
     private static final int PAYMENT_ITEMS_START_Y = 17;
@@ -43,7 +47,8 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
         super.init();
 
         // Arrow
-        this.addElement(new ShipmentProgressArrowElement(this, PROGRESS_ARROW_ID, getGuiLeft() + PROGRESS_ARROW_X, getGuiTop() + PROGRESS_ARROW_Y, menu.ware));
+        this.addElement(new ShipmentProgressArrowElement(this, PROGRESS_ARROW_ID,
+                getGuiLeft() + PROGRESS_ARROW_X, getGuiTop() + PROGRESS_ARROW_Y, menu.ware));
 
         // Payment Items
         int paymentX = this.getGuiLeft() + PAYMENT_ITEMS_START_X;
@@ -58,21 +63,23 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
                 if (index >= menu.paymentItems.size())
                     break;
                 else if (index == MAX_PAYMENT_ITEMS -1 && menu.paymentItems.size() > MAX_PAYMENT_ITEMS)
-                    addElement(new MorePaymentItemsElement(this, index +1, paymentX + column * 18, paymentY + row * 18,
+                    addElement(new MorePaymentItemsElement(this, index + PAYMENT_ITEMS_START_ID, paymentX + column * 18, paymentY + row * 18,
                             menu.paymentItems.stream().skip(MAX_PAYMENT_ITEMS).toList()));
                 else {
                     ItemStack paymentItem = menu.paymentItems.get(index);
-                    addElement(new PaymentItemElement(this, index + 1, paymentX + column * 18, paymentY + row * 18, paymentItem));
+                    addElement(new PaymentItemElement(this, index + PAYMENT_ITEMS_START_ID, paymentX + column * 18, paymentY + row * 18, paymentItem));
                 }
                 index++;
             }
         }
+
+        this.addElement(new PaymentRequestElement(this, PURCHASE_REQUEST_ID, this.getGuiLeft() + 124, this.getGuiTop() + 36, getMenu().ware));
     }
 
     @Override
     public void render(@NotNull PoseStack pPoseStack, int mouseX, int mouseY, float partialTick) {
         super.render(pPoseStack, mouseX, mouseY, partialTick);
-        drawDebugInfo(pPoseStack, mouseX, mouseY, partialTick);
+
     }
 
     @Override

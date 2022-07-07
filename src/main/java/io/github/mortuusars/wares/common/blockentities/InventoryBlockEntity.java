@@ -68,7 +68,7 @@ public abstract class InventoryBlockEntity extends BlockEntity implements Contai
         return items;
     }
 
-    public LazyOptional<ItemStackHandler> getHandler() {
+    public LazyOptional<ItemStackHandler> getInventoryHandler() {
         return this.inventoryHandlerLazy;
     }
 

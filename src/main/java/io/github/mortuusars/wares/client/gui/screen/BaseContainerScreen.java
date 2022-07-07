@@ -1,6 +1,9 @@
 package io.github.mortuusars.wares.client.gui.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -9,7 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.gui.GuiUtils;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +23,7 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
 
     private final List<ScreenElement<?>> elements = new ArrayList<>();
     private final List<ScreenElement<?>> elementsReversed = new ArrayList<>();
+    protected boolean drawDebugInfo = true;
 
     public BaseContainerScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -55,21 +61,35 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTick);
+
+        boolean isOverAnyElement = false;
         for (ScreenElement<?> element : elements){
             element.render(poseStack, mouseX, mouseY, partialTick);
-            if (element.isMouseOver(mouseX, mouseY))
+            if (element.isMouseOver(mouseX, mouseY)){
+                Cursor.set(element.getCursor());
                 element.onMouseOver(mouseX, mouseY);
+                isOverAnyElement = true;
+            }
         }
+
+        if (!isOverAnyElement)
+            Cursor.set(Cursor.ARROW);
+
         this.renderTooltip(poseStack, mouseX, mouseY);
     }
 
     @Override
     protected void renderTooltip(@NotNull PoseStack poseStack, int x, int y) {
         super.renderTooltip(poseStack, x, y);
-        for (ScreenElement<?> element : elements){
-            if (element.isMouseOver(x, y))
+        for (ScreenElement<?> element : elementsReversed){
+            if (element.isMouseOver(x, y)){
                 element.renderTooltip(poseStack, x ,y);
+                break;
+            }
         }
+
+        if (this.drawDebugInfo && minecraft.options.renderDebug)
+            drawDebugInfo(poseStack, x, y, 0);
     }
 
     public void renderItemStackTooltip(PoseStack poseStack, ItemStack stack, int mouseX, int mouseY){
@@ -91,30 +111,47 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
             }
         }
 
-        if (super.mouseClicked(mouseX, mouseY, pButton))
-            return true;
-
-        return false;
+        return super.mouseClicked(mouseX, mouseY, pButton);
     }
 
     public void drawDebugInfo(PoseStack poseStack, int mouseX, int mouseY, float partialTick){
         int xOffset = 5;
+        int yOffset = 5;
 
-        this.font.draw(poseStack, "Mouse X: " + mouseX, xOffset, 5, 0x50eeee);
-        this.font.draw(poseStack, "Mouse Y: " + mouseY, xOffset, 15, 0x50eeee);
+        this.font.draw(poseStack, "Width: " + this.width, xOffset, yOffset += 10, 0x50eeee);
+        this.font.draw(poseStack, "Height: " + this.height, xOffset, yOffset += 10, 0x50eeee);
 
-        this.font.draw(poseStack, "Width: " + this.width, xOffset, 25, 0x50eeee);
-        this.font.draw(poseStack, "Height: " + this.height, xOffset, 35, 0x50eeee);
+        this.font.draw(poseStack, "Image Width: " + this.imageWidth, xOffset, yOffset += 10, 0x50eeee);
+        this.font.draw(poseStack, "Image Height: " + this.imageHeight, xOffset, yOffset += 10, 0x50eeee);
 
-        this.font.draw(poseStack, "Image Width: " + this.imageWidth, xOffset, 45, 0x50eeee);
-        this.font.draw(poseStack, "Image Height: " + this.imageHeight, xOffset, 55, 0x50eeee);
+        this.font.draw(poseStack, "Mouse X: " + mouseX, xOffset, yOffset += 10, 0x50eeee);
+        this.font.draw(poseStack, "Mouse Y: " + mouseY, xOffset, yOffset += 10, 0x50eeee);
 
-        for (ScreenElement<?> element : elements){
+        yOffset += 10;
+
+        for (ScreenElement<?> element : elementsReversed){
             if (element.isMouseOver(mouseX, mouseY)){
-                this.font.draw(poseStack, "MouseOver ID: " + element.id, xOffset, 70, 0x50eeee);
-                //TODO: DEBUL LINES
-                fill(poseStack, element.posX, element.posY, element.posX + element.width, element.posY + element.height, 0xff3333);
+                this.font.draw(poseStack, element.getClass().getSimpleName() + ", ID: " + element.id, xOffset, yOffset += 10, 0x50eeee);
+
+                int borderColor = 0xFFAA2244;
+
+                int x = element.posX -1;
+                int y = element.posY -1;
+                int width = element.width;
+                int height = element.height;
+
+                // Mouseover element border
+                hLine(poseStack, x, x + width, y, borderColor);
+                hLine(poseStack, x, x + width, y + height, borderColor);
+                vLine(poseStack, x, y, y + height, borderColor);
+                vLine(poseStack, x + width, y, y + height, borderColor);
             }
         }
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        Cursor.set(Cursor.ARROW);
     }
 }

@@ -1,8 +1,12 @@
 package io.github.mortuusars.wares.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.function.Supplier;
 
 public class ScreenElement<T extends Screen> {
     protected final T screen;
@@ -23,6 +27,10 @@ public class ScreenElement<T extends Screen> {
 
     public boolean isMouseOver(double mouseX, double mouseY){
         return (mouseX >= posX && mouseX <= posX + width) && (mouseY >= posY && mouseY <= posY + height);
+    }
+
+    public Cursor getCursor(){
+        return Cursor.ARROW;
     }
 
     public void renderBg(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {}

@@ -1,17 +1,22 @@
 package io.github.mortuusars.wares.common;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.math.Vector3f;
 import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModItems;
+import io.github.mortuusars.wares.utils.PosUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,7 +25,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,54 +34,68 @@ import java.util.stream.IntStream;
 
 public class ShippingCrate {
 
-    public static final int SLOTS = 31;
-    public static final int ITEM_SLOTS = 30;
-    public static final int BILL_SLOT_INDEX = 30;
+    public static final int SLOTS = 30;
 
     public static final Method _containerGetItemsMethod = ObfuscationReflectionHelper.findMethod(RandomizableContainerBlockEntity.class, "m_7086_"); // getItems
 
-    public static void convertToShippingCrate(Level level, BlockPos pos, BlockState clickedBlockState, ItemStack heldItemStack){
+    public static void convertToShippingCrate(Player player, Level level, BlockPos pos, BlockState clickedBlockState, ItemStack heldItemStack){
 
-        if (!heldItemStack.is(ModItems.BILL_OF_LADING.get()))
+        if (!heldItemStack.is(ModItems.PURCHASE_REQUEST.get()))
             throw new IllegalArgumentException(String.format("heldItemStack should be '%s'. Value: %s1",
-                    ModItems.BILL_OF_LADING.get().getRegistryName(), heldItemStack.getItem().getRegistryName()));
+                    ModItems.PURCHASE_REQUEST.get().getRegistryName(), heldItemStack.getItem().getRegistryName()));
 
-        if (level.isClientSide){
-            //TODO sound
-            spawnConvertedParticles(level, pos);
+        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(heldItemStack);
+        if (wareOptional.isEmpty()){
+            LogUtils.getLogger().error("Cannot convert '{}' to Shipping Crate: Ware was not deserialized.", clickedBlockState);
             return;
         }
 
-        NonNullList<ItemStack> oldItems = NonNullList.create();
+        Ware ware = wareOptional.get();
 
-        BlockEntity oldBlockEntity = level.getBlockEntity(pos);
-        if (oldBlockEntity != null)
-            oldItems = getBlockEntityItemStacks(oldBlockEntity);
+//        if (level.isClientSide){
+//            //TODO sound
+//            spawnConvertedParticles(level, pos);
+//            return;
+//        }
 
-        level.removeBlockEntity(pos);
-        level.removeBlock(pos, false);
+        if (!level.isClientSide){
+            NonNullList<ItemStack> oldItems = NonNullList.create();
 
-        BlockState newBlockState = ModBlocks.SHIPPING_CRATE.get().withPropertiesOf(clickedBlockState);
+            BlockEntity oldBlockEntity = level.getBlockEntity(pos);
+            if (oldBlockEntity != null)
+                oldItems = getBlockEntityItemStacks(oldBlockEntity);
 
-        level.setBlock(pos, newBlockState, Block.UPDATE_ALL);
+            level.removeBlockEntity(pos);
+            level.removeBlock(pos, false);
 
-        if (level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
-            shippingCrateEntity.setBillStack(heldItemStack);
+            BlockState newBlockState = ModBlocks.SHIPPING_CRATE.get().withPropertiesOf(clickedBlockState);
 
-            // Transfer previous block's items to new container:
-            for (int i = 0; i < Math.min(oldItems.size(), SLOTS); i++) {
-                if (i == BILL_SLOT_INDEX)
-                    continue;
+            if (level.setBlock(pos, newBlockState, Block.UPDATE_ALL)){
 
-                shippingCrateEntity.setItem(i, oldItems.get(i));
-                oldItems.set(i, ItemStack.EMPTY);
+                var shippingCrateEntity = (ShippingCrateBlockEntity)level.getBlockEntity(pos);
+                if (shippingCrateEntity == null)
+                    throw new IllegalStateException("ShippingCrate should have its block entity after block is placed.");
+                shippingCrateEntity.setWare(ware);
+
+                // Transfer previous block's items to shipping crate slots:
+                for (int i = 0; i < Math.min(oldItems.size(), SLOTS); i++) {
+                    shippingCrateEntity.setItem(i, oldItems.get(i));
+                    oldItems.set(i, ItemStack.EMPTY);
+                }
+
+                // Drop old block entity items which were not added to shipping crate:
+                for (ItemStack itemStack : oldItems)
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
             }
         }
-        else
-            LogUtils.getLogger().error("Conversion failed: blockEntity at '{}' is not ShippingCrateBlockEntity.", pos);
 
-        for (ItemStack itemStack : oldItems)
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+        if (level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity){
+            if (level.isClientSide)
+                spawnConvertedParticles(level, pos);
+
+            Vector3f blockC = PosUtils.blockCenter(pos);
+            level.playSound(player, blockC.x(), blockC.y(), blockC.z(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 0.5f, 1f);
+        }
     }
 
     @SuppressWarnings("unchecked")

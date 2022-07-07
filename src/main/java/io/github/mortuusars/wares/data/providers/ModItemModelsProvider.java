@@ -25,8 +25,8 @@ public class ModItemModelsProvider extends ItemModelProvider {
 
         singleTexture(itemPath(ModItems.PURCHASE_REQUEST), mcLoc("item/generated"), "layer0",
                 modLoc("item/" + itemPath(ModItems.PURCHASE_REQUEST)));
-        singleTexture(itemPath(ModItems.BILL_OF_LADING), mcLoc("item/generated"), "layer0",
-                modLoc("item/" + itemPath(ModItems.BILL_OF_LADING)));
+//        singleTexture(itemPath(ModItems.BILL_OF_LADING), mcLoc("item/generated"), "layer0",
+//                modLoc("item/" + itemPath(ModItems.BILL_OF_LADING)));
     }
 
     private String itemPath(RegistryObject<? extends Item> registryObject){

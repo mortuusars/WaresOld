@@ -1,5 +1,6 @@
 package io.github.mortuusars.wares.common.blockentities;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import io.github.mortuusars.wares.WareProgression;
@@ -41,12 +42,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @SuppressWarnings("NullableProblems")
 public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider {
 
     private Ware ware;
-    private float progress;
+
+    private int requestedCount = 0;
+    private int fulfilledCount = 0;
 
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         protected void onOpen(Level level, BlockPos pos, BlockState blockState) {
@@ -71,36 +75,65 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
         super(ModBlockEntities.SHIPPING_CRATE_BLOCK_ENTITY.get(), pos, blockState, ShippingCrate.SLOTS);
     }
 
-    public ItemStack getBillStack(){
-        return this.getItem(ShippingCrate.BILL_SLOT_INDEX);
+    public Ware getWare(){
+        return ware;
     }
 
-    public void setBillStack(ItemStack billOfLadingStack){
-        if (!billOfLadingStack.is(ModItems.BILL_OF_LADING.get()))
-            throw new IllegalArgumentException("Only 'wares:bill_of_lading' is allowed.");
-
-        Optional<Ware> ware = WareUtils.readWareFromStackNBT(billOfLadingStack);
-        ware.ifPresent(w -> {
-            this.ware = w;
-//            requestedCount = w.requestedItems.stream().mapToInt(wItem -> wItem.count).sum();
-            updateShippingProgress(0);
-        });
-
-        this.insertItem(ShippingCrate.BILL_SLOT_INDEX, billOfLadingStack);
+    public void setWare(@NotNull Ware ware){
+        this.ware = ware;
+        requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
     }
 
     public NonNullList<ItemStack> getPaymentItems() {
-        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(this.getBillStack());
-        if (wareOptional.isPresent()){
-            Ware ware = wareOptional.get();
-            return ware.getPaymentStacks();
-        }
-        return NonNullList.of(new ItemStack(Items.BARRIER));
+        return ware.getPaymentStacks();
     }
 
-    public float getProgress(){
-        return progress;
+    public float getProgressPercentage(){
+        if (requestedCount == 0)
+            return 0f;
+
+        return Math.min( Math.max(0f, fulfilledCount / (float)requestedCount), 1f);
     }
+
+    public Pair<Integer, Integer> getProgress(){
+        return Pair.of(requestedCount, fulfilledCount);
+    }
+
+    private void updateShippingProgress(int slot) {
+        if (ware == null){
+            requestedCount = 0;
+            fulfilledCount = 0;
+            return;
+        }
+
+        Map<FixedWareItemInfo, Integer> requestedAndCounts = new HashMap<>();
+        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
+            ItemStack stack = this.getItem(i);
+            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
+                if (requestedAndCounts.containsKey(item)){
+                    int newCount = requestedAndCounts.get(item) + stack.getCount();
+                    requestedAndCounts.put(item, newCount);
+                }
+                else {
+                    requestedAndCounts.put(item, stack.getCount());
+                }
+            });
+        }
+
+        fulfilledCount = requestedAndCounts.values().stream().mapToInt(i -> i).sum();
+    }
+
+
+    public void shipWare(Player player) {
+        Level level = player.getLevel();
+        ShippingCrate.Shipping shippingResult = ShippingCrate.getShippingResult(ware, this.getItems());
+        if (shippingResult.isFulfilled()){
+            this.clearContent();
+            WareProgression.shipWare(ware, player, level, this.worldPosition, shippingResult);
+        }
+    }
+
+    // <Container>
 
     @Override
     public int getContainerSize() {
@@ -115,52 +148,7 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
                 setChanged();
                 updateShippingProgress(slot);
             }
-
-            @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                return slot != ShippingCrate.BILL_SLOT_INDEX || stack.is(ModItems.BILL_OF_LADING.get());
-            }
         };
-    }
-
-    private void updateShippingProgress(int slot) {
-        if (ware == null)
-            return;
-
-//        if (!isInventoryKnown){
-//            for (int i = 0; i < ShippingCrate.ITEM_SLOTS; i++) {
-//                ItemStack itemStack = this.getItem(i);
-//                itemStacks.set(i, itemStack);
-//                ware.getMatchingRequestedItem(itemStack).ifPresent(wItem -> {
-//
-//                    matchedRequestedItems.put(wItem, )
-//
-//                });
-//            }
-//            isInventoryKnown = true;
-//        }
-//
-//        itemStacks.set(slot, this.getItem(slot));
-
-        HashMap<FixedWareItemInfo, Integer> matchedItems = new HashMap<>();
-
-        for (int i = 0; i < ShippingCrate.ITEM_SLOTS; i++) {
-            ItemStack itemStack = this.getItem(i);
-            ware.getMatchingRequestedItem(itemStack).ifPresent(requestedItem -> matchedItems.put(requestedItem, itemStack.getCount()));
-        }
-
-        int requestedCount = 0;
-        int currentCount = 0;
-
-        for (var m : matchedItems.entrySet()){
-            requestedCount += m.getKey().count;
-            currentCount += m.getValue();
-        }
-
-        if (currentCount == 0)
-            progress = 0f;
-        else
-            progress = Math.min(1f, requestedCount / (float)currentCount);
     }
 
     @Override
@@ -220,14 +208,5 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
         super.saveAdditional(tag);
         WareUtils.serialize(ware).ifPresentOrElse(w -> tag.putString("Ware", w),
                 () -> LogUtils.getLogger().error("Ware would not be saved in a block entity. Value: " + ware));
-    }
-
-    public void shipWare(Player player) {
-        Level level = player.getLevel();
-        ShippingCrate.Shipping shippingResult = ShippingCrate.getShippingResult(ware, this.getItems());
-        if (shippingResult.isFulfilled()){
-            this.clearContent();
-            WareProgression.shipWare(ware, player, level, this.worldPosition, shippingResult);
-        }
     }
 }

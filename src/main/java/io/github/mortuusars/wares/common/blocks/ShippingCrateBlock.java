@@ -1,7 +1,10 @@
 package io.github.mortuusars.wares.common.blocks;
 
 import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
+import io.github.mortuusars.wares.setup.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -20,10 +23,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ShippingCrateBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -32,6 +40,11 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
     public ShippingCrateBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
+        return NonNullList.of(ItemStack.EMPTY, new ItemStack(ModItems.CRATE.get()));
     }
 
     @Override
@@ -60,8 +73,15 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
     @SuppressWarnings("deprecation")
     @Override
     public void onRemove(@NotNull BlockState oldBlockState, Level level, @NotNull BlockPos pos, @NotNull BlockState newBlockState, boolean isMoving) {
-        if (!level.isClientSide && !oldBlockState.is(newBlockState.getBlock()) && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity)
+        if (!level.isClientSide && !oldBlockState.is(newBlockState.getBlock()) && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
             Containers.dropContents(level, pos, shippingCrateEntity);
+            Ware ware = shippingCrateEntity.getWare();
+            if (ware != null){
+                ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
+                WareUtils.saveToStackNBT(ware, request);
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), request);
+            }
+        }
 
         super.onRemove(oldBlockState, level, pos, newBlockState, isMoving);
     }
