@@ -44,6 +44,18 @@ public class PaymentParcelMenu extends WaresAbstractContainerMenu {
 
         this.addPlayerInventory(playerInventory, 84);
         this.addPlayerHotbar(playerInventory, 142);
+
+        blockEntity.startOpen(playerInventory.player);
+    }
+
+    @Override
+    public void removed(@NotNull Player player) {
+        super.removed(player);
+        blockEntity.stopOpen(player);
+    }
+
+    public PaymentParcelBlockEntity getBlockEntity(){
+        return blockEntity;
     }
 
     @Override

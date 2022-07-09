@@ -1,5 +1,6 @@
 package io.github.mortuusars.wares.common.delivery_note;
 
+import io.github.mortuusars.wares.WareProgression;
 import io.github.mortuusars.wares.core.Delivery;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -36,9 +37,10 @@ public class DeliveryNoteBlockEntity extends BlockEntity {
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState blockState, T blockEntity) {
         if (blockEntity instanceof DeliveryNoteBlockEntity deliveryNoteEntity && deliveryNoteEntity.delivery != null){
              if (level.getDayTime() % 24000 >= deliveryNoteEntity.delivery.deliveryTime){
-                 Containers.dropContents(level, pos, new SimpleContainer(
-                         deliveryNoteEntity.delivery.ware.getPaymentStacks().toArray(new ItemStack[0])));
-                 level.removeBlock(pos, false);
+                 WareProgression.spawnPaymentParcel(level, pos, deliveryNoteEntity.delivery);
+//                 Containers.dropContents(level, pos, new SimpleContainer(
+//                         deliveryNoteEntity.delivery.ware.getPaymentStacks().toArray(new ItemStack[0])));
+//                 level.removeBlock(pos, false);
              }
         }
     }

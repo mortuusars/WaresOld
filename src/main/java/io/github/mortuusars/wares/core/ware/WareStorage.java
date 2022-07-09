@@ -62,6 +62,14 @@ public class WareStorage {
                 .addRequestedItem(new PotentialWareItemInfo().item("minecraft:grindstone").count(1))
                 .addPaymentItem(new PotentialWareItemInfo().item("minecraft:leather").countRange(4, 6)));
 
+        newWares.add(new PotentialWare()
+                .title("Title asdasd")
+                .experience(2)
+                .weight(8f)
+                .rarity(Rarity.COMMON)
+                .addRequestedItem(new PotentialWareItemInfo().item("minecraft:grindstone").count(1))
+                .addPaymentItem(new PotentialWareItemInfo().item("minecraft:leather").countRange(154, 187)));
+
         for (int i = 0; i < 16; i++) {
             newWares.get(2).addPaymentItem(new PotentialWareItemInfo().item("minecraft:gold_ingot").count(13));
         }

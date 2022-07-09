@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -119,6 +120,7 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
         ShippingCrate.Shipping shippingResult = ShippingCrate.getShippingResult(ware, this.getItems());
         if (shippingResult.isFulfilled()){
             this.clearContent();
+            level.setBlock(worldPosition, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             WareProgression.shipWare(ware, player, level, this.worldPosition, shippingResult);
         }
     }

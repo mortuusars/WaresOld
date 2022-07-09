@@ -52,7 +52,7 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
     public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide){
             ShippingCrateBlockEntity blockEntity = (ShippingCrateBlockEntity) level.getBlockEntity(pos);
-            NetworkHooks.openGui((ServerPlayer) player, blockEntity);
+            NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
