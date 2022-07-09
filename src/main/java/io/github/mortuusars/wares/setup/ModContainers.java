@@ -1,5 +1,6 @@
 package io.github.mortuusars.wares.setup;
 
+import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelMenu;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -7,8 +8,12 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModContainers {
     public static final RegistryObject<MenuType<ShippingCrateMenu>> SHIPPING_CRATE = Registries.MENU_TYPES.register(
-                    "shipping_crate",
-                    () -> IForgeMenuType.create((windowId, inv, data) -> new ShippingCrateMenu(windowId, inv, data.readBlockPos()) ));
+            "shipping_crate",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new ShippingCrateMenu(windowId, inv, data.readBlockPos()) ));
+
+    public static final RegistryObject<MenuType<PaymentParcelMenu>> PAYMENT_PARCEL = Registries.MENU_TYPES.register(
+            "payment_parcel",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new PaymentParcelMenu(windowId, inv, data.readBlockPos()) ));
 
     public static void register() { }
 }

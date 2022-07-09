@@ -22,10 +22,10 @@ public class ModItemModelsProvider extends ItemModelProvider {
         withExistingParent(itemPath(ModItems.CRATE), modLoc("block/" + blockPath(ModBlocks.CRATE)));
         withExistingParent(itemPath(ModItems.SHIPPING_CRATE), modLoc("block/" + blockPath(ModBlocks.SHIPPING_CRATE)));
 
+        withExistingParent(itemPath(ModItems.PAYMENT_PARCEL), modLoc("block/" + blockPath(ModBlocks.PAYMENT_PARCEL)));
+
         singleTexture(itemPath(ModItems.PURCHASE_REQUEST), mcLoc("item/generated"), "layer0",
                 modLoc("item/" + itemPath(ModItems.PURCHASE_REQUEST)));
-//        singleTexture(itemPath(ModItems.BILL_OF_LADING), mcLoc("item/generated"), "layer0",
-//                modLoc("item/" + itemPath(ModItems.BILL_OF_LADING)));
 
         singleTexture(itemPath(ModItems.DELIVERY_NOTE), mcLoc("item/generated"), "layer0", modLoc("item/" + itemPath(ModItems.DELIVERY_NOTE)));
     }

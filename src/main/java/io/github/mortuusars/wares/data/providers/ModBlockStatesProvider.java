@@ -29,7 +29,8 @@ public class ModBlockStatesProvider extends BlockStateProvider {
                 models().withExistingParent(blockPath(ModBlocks.SHIPPING_CRATE) + "_opened", modLoc("block/" + blockPath(ModBlocks.CRATE) + "_opened")) :
                 shippingCrateModel));
 
-        simpleBlock(ModBlocks.DELIVERY_NOTE.get(), models().withExistingParent(blockPath(ModBlocks.DELIVERY_NOTE), "wares:block/delivery_note"));
+        simpleBlock(ModBlocks.DELIVERY_NOTE.get(), models().getExistingFile(modLoc("block/" + blockPath(ModBlocks.DELIVERY_NOTE))));
+        simpleBlock(ModBlocks.PAYMENT_PARCEL.get(), models().getExistingFile(modLoc("block/" + blockPath(ModBlocks.PAYMENT_PARCEL))));
     }
 
     private void crate() {

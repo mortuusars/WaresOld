@@ -1,5 +1,6 @@
 package io.github.mortuusars.wares.common.shipping_crate;
 
+import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelBlockEntity;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
@@ -49,14 +50,12 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
 
     @Override
     public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+        if (!level.isClientSide){
+            ShippingCrateBlockEntity blockEntity = (ShippingCrateBlockEntity) level.getBlockEntity(pos);
+            NetworkHooks.openGui((ServerPlayer) player, blockEntity);
+        }
 
-        BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof ShippingCrateBlockEntity shippingCrateBlockEntity)
-            NetworkHooks.openGui((ServerPlayer) player, shippingCrateBlockEntity, pos);
-
-        return InteractionResult.CONSUME;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Nullable

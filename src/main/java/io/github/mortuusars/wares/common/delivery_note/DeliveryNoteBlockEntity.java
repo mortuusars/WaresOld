@@ -15,7 +15,7 @@ public class DeliveryNoteBlockEntity extends BlockEntity {
     private Delivery delivery;
 
     public DeliveryNoteBlockEntity(BlockPos pos, BlockState blockState) {
-        super(ModBlockEntities.DELIVERY_NOTE_BLOCK_ENTITY.get(), pos, blockState);
+        super(ModBlockEntities.DELIVERY_NOTE.get(), pos, blockState);
     }
 
     public Delivery getDelivery() {

@@ -82,6 +82,10 @@ public abstract class InventoryBlockEntity extends BlockEntity implements Contai
 
     // <Container>
 
+    public int getContainerSize(){
+        return slots;
+    }
+
     @Override
     public boolean isEmpty() {
         return IntStream.range(0, this.getContainerSize()).allMatch(i -> this.getItem(i).isEmpty());

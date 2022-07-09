@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +37,7 @@ public class DeliveryNoteBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return !level.isClientSide && blockEntityType == ModBlockEntities.DELIVERY_NOTE_BLOCK_ENTITY.get() ? DeliveryNoteBlockEntity::tick : null;
+        return !level.isClientSide && blockEntityType == ModBlockEntities.DELIVERY_NOTE.get() ? DeliveryNoteBlockEntity::tick : null;
     }
 
     @Override

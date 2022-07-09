@@ -62,7 +62,7 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
     };
 
     public ShippingCrateBlockEntity(BlockPos pos, BlockState blockState) {
-        super(ModBlockEntities.SHIPPING_CRATE_BLOCK_ENTITY.get(), pos, blockState, ShippingCrate.SLOTS);
+        super(ModBlockEntities.SHIPPING_CRATE.get(), pos, blockState, ShippingCrate.SLOTS);
     }
 
     public Ware getWare(){
@@ -124,11 +124,6 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
     }
 
     // <Container>
-
-    @Override
-    public int getContainerSize() {
-        return ShippingCrate.SLOTS;
-    }
 
     @Override
     protected @NotNull ItemStackHandler createInventory(int slots) {
