@@ -19,7 +19,6 @@ public class ModItemModelsProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        withExistingParent(itemPath(ModItems.DELIVERY_TABLE), modLoc("block/" + blockPath(ModBlocks.DELIVERY_TABLE)));
         withExistingParent(itemPath(ModItems.CRATE), modLoc("block/" + blockPath(ModBlocks.CRATE)));
         withExistingParent(itemPath(ModItems.SHIPPING_CRATE), modLoc("block/" + blockPath(ModBlocks.SHIPPING_CRATE)));
 
@@ -27,6 +26,8 @@ public class ModItemModelsProvider extends ItemModelProvider {
                 modLoc("item/" + itemPath(ModItems.PURCHASE_REQUEST)));
 //        singleTexture(itemPath(ModItems.BILL_OF_LADING), mcLoc("item/generated"), "layer0",
 //                modLoc("item/" + itemPath(ModItems.BILL_OF_LADING)));
+
+        singleTexture(itemPath(ModItems.DELIVERY_NOTE), mcLoc("item/generated"), "layer0", modLoc("item/" + itemPath(ModItems.DELIVERY_NOTE)));
     }
 
     private String itemPath(RegistryObject<? extends Item> registryObject){

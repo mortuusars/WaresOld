@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.common.blockentities;
+package io.github.mortuusars.wares.common.crate;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

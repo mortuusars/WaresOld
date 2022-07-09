@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.common.blockentities;
+package io.github.mortuusars.wares.common.base;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
@@ -33,8 +33,8 @@ public abstract class InventoryBlockEntity extends BlockEntity implements Contai
     public final ItemStackHandler inventory;
     protected LazyOptional<ItemStackHandler> inventoryHandlerLazy;
 
-    public InventoryBlockEntity(BlockEntityType<?> type, BlockPos worldPosition, BlockState blockState, int slots) {
-        super(type, worldPosition, blockState);
+    public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, int slots) {
+        super(type, pos, blockState);
 
         Preconditions.checkArgument(slots > 0, "slot count should be larger than 0. Value: {}", slots);
         this.slots = slots;

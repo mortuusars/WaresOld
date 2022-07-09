@@ -1,8 +1,8 @@
-package io.github.mortuusars.wares.common;
+package io.github.mortuusars.wares.common.shipping_crate;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
-import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;

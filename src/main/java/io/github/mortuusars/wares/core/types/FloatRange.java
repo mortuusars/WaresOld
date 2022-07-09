@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.types;
+package io.github.mortuusars.wares.core.types;
 
 import com.google.common.base.Preconditions;
 

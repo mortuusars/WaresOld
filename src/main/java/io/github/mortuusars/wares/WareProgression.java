@@ -1,8 +1,8 @@
 package io.github.mortuusars.wares;
 
 import com.mojang.logging.LogUtils;
-import io.github.mortuusars.wares.common.ShippingCrate;
-import io.github.mortuusars.wares.common.blockentities.DeliveryNoteBlockEntity;
+import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
+import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlockEntity;
 import io.github.mortuusars.wares.core.Delivery;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
@@ -30,5 +30,9 @@ public class WareProgression {
         }
 
         deliveryEntity.setDelivery(delivery);
+    }
+
+    public static void spawnPaymentParcel(){
+
     }
 }

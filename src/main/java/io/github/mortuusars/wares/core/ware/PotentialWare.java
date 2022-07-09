@@ -3,7 +3,7 @@ package io.github.mortuusars.wares.core.ware;
 import com.google.common.base.Preconditions;
 import io.github.mortuusars.wares.core.Rarity;
 import io.github.mortuusars.wares.core.ware.item.PotentialWareItemInfo;
-import io.github.mortuusars.wares.types.IntRange;
+import io.github.mortuusars.wares.core.types.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

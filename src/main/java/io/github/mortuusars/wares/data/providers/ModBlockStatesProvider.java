@@ -20,31 +20,6 @@ public class ModBlockStatesProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-
-
-        BlockModelBuilder deliveryTableModel = models().withExistingParent("delivery_table", mcLoc("minecraft:block/block"))
-                .texture("leg", mcLoc("block/netherite_block"))
-                .texture("wood", mcLoc("block/spruce_planks"))
-                .element()
-                .from(4, 0, 4)
-                .to(12, 3, 12)
-                .allFaces(((direction, faceBuilder) -> faceBuilder.texture("#leg")))
-                .end()
-
-                .element()
-                .from(6, 3, 6)
-                .to(10, 13, 10)
-                .allFaces(((direction, faceBuilder) -> faceBuilder.texture("#leg")))
-                .end()
-
-                .element()
-                .from(0, 13, 0)
-                .to(16, 16, 16)
-                .allFaces(((direction, faceBuilder) -> faceBuilder.texture("#wood")))
-                .end();
-
-        simpleBlock(ModBlocks.DELIVERY_TABLE.get(), deliveryTableModel);
-
         crate();
 
         BlockModelBuilder shippingCrateModel = models()
@@ -53,6 +28,8 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         directionalBlock(ModBlocks.SHIPPING_CRATE.get(), (blockState -> blockState.getValue(BarrelBlock.OPEN) ?
                 models().withExistingParent(blockPath(ModBlocks.SHIPPING_CRATE) + "_opened", modLoc("block/" + blockPath(ModBlocks.CRATE) + "_opened")) :
                 shippingCrateModel));
+
+        simpleBlock(ModBlocks.DELIVERY_NOTE.get(), models().withExistingParent(blockPath(ModBlocks.DELIVERY_NOTE), "wares:block/delivery_note"));
     }
 
     private void crate() {

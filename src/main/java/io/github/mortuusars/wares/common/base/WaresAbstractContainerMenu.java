@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.common.menus;
+package io.github.mortuusars.wares.common.base;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;

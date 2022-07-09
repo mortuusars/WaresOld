@@ -1,9 +1,8 @@
-package io.github.mortuusars.wares.common.blockentities;
+package io.github.mortuusars.wares.common.delivery_note;
 
 import io.github.mortuusars.wares.core.Delivery;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -42,5 +41,9 @@ public class DeliveryNoteBlockEntity extends BlockEntity {
                  level.removeBlock(pos, false);
              }
         }
+    }
+
+    public void dropNote() {
+//        this.level
     }
 }

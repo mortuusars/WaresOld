@@ -1,17 +1,13 @@
-package io.github.mortuusars.wares.common.blockentities;
+package io.github.mortuusars.wares.common.shipping_crate;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import com.mojang.math.Vector3f;
 import io.github.mortuusars.wares.WareProgression;
-import io.github.mortuusars.wares.common.ShippingCrate;
+import io.github.mortuusars.wares.common.base.InventoryBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
-import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
-import io.github.mortuusars.wares.setup.ModItems;
-import io.github.mortuusars.wares.utils.PosUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
@@ -21,19 +17,14 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -42,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 @SuppressWarnings("NullableProblems")
 public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider {

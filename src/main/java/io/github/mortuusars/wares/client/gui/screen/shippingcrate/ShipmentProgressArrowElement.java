@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
 import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
-import io.github.mortuusars.wares.common.ShippingCrate;
+import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.Ware;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.LocalPlayer;

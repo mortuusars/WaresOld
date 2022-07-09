@@ -6,10 +6,6 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems {
-
-    public static final RegistryObject<BlockItem> DELIVERY_TABLE = Registries.ITEMS.register("delivery_table",
-            () -> new BlockItem(ModBlocks.DELIVERY_TABLE.get(), new Item.Properties().tab(Registries.WARES_CREATIVE_TAB)));
-
     public static final RegistryObject<BlockItem> CRATE = Registries.ITEMS.register("crate",
             () -> new BlockItem(ModBlocks.CRATE.get(), new Item.Properties().tab(Registries.WARES_CREATIVE_TAB)));
 

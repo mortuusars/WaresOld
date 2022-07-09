@@ -1,6 +1,6 @@
-package io.github.mortuusars.wares.common.blocks;
+package io.github.mortuusars.wares.common.crate;
 
-import io.github.mortuusars.wares.common.blockentities.CrateBlockEntity;
+import io.github.mortuusars.wares.common.crate.CrateBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;

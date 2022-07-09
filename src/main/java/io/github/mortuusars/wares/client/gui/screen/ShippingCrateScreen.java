@@ -7,8 +7,7 @@ import io.github.mortuusars.wares.client.gui.screen.shippingcrate.MorePaymentIte
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentItemElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentRequestElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShipmentProgressArrowElement;
-import io.github.mortuusars.wares.common.menus.ShippingCrateMenu;
-import net.minecraft.SharedConstants;
+import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateMenu;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

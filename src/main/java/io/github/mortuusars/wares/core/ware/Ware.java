@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.core.ware;
 
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
-import io.github.mortuusars.wares.types.IntRange;
+import io.github.mortuusars.wares.core.types.IntRange;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 
@@ -57,7 +57,7 @@ public class Ware {
     }
 
     public Ware deliveryTimeRange(int min, int max){
-        this.deliveryTime = new io.github.mortuusars.wares.types.IntRange(min, max);
+        this.deliveryTime = new IntRange(min, max);
         return this;
     }
 

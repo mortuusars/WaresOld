@@ -1,9 +1,8 @@
-package io.github.mortuusars.wares.common.blocks;
+package io.github.mortuusars.wares.common.shipping_crate;
 
-import io.github.mortuusars.wares.common.blockentities.ShippingCrateBlockEntity;
+import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
-import io.github.mortuusars.wares.setup.ModBlockEntities;
 import io.github.mortuusars.wares.setup.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,8 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -29,8 +26,6 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ShippingCrateBlock extends Block implements EntityBlock {
