@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.setup;
 
 import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlockEntity;
-import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelBlockEntity;
+import io.github.mortuusars.wares.common.parcel.ParcelBlockEntity;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
@@ -17,9 +17,9 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(DeliveryNoteBlockEntity::new, ModBlocks.DELIVERY_NOTE.get())
                             .build(null));
 
-    public static final RegistryObject<BlockEntityType<PaymentParcelBlockEntity>> PAYMENT_PARCEL =
+    public static final RegistryObject<BlockEntityType<ParcelBlockEntity>> PAYMENT_PARCEL =
             Registries.BLOCK_ENTITIES.register("payment_parcel_block_entity",
-                    () -> BlockEntityType.Builder.of(PaymentParcelBlockEntity::new, ModBlocks.PAYMENT_PARCEL.get())
+                    () -> BlockEntityType.Builder.of(ParcelBlockEntity::new, ModBlocks.PAYMENT_PARCEL.get())
                             .build(null));
 
     public static void register() {}

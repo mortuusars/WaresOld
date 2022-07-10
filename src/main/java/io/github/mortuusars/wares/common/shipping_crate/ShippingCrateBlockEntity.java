@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import io.github.mortuusars.wares.WareProgression;
 import io.github.mortuusars.wares.common.base.InventoryBlockEntity;
+import io.github.mortuusars.wares.common.extensions.IOpenersCounter;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
@@ -36,31 +37,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 @SuppressWarnings("NullableProblems")
-public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider {
+public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider, IOpenersCounter {
 
     private Ware ware;
 
     private int requestedCount = 0;
     private int fulfilledCount = 0;
 
-    private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
-        protected void onOpen(Level level, BlockPos pos, BlockState blockState) {
-            ShippingCrateBlockEntity.this.playSound(blockState, SoundEvents.BARREL_OPEN);
-            ShippingCrateBlockEntity.this.updateBlockState(blockState, true);
-        }
-
-        protected void onClose(Level level, BlockPos pos, BlockState blockState) {
-            ShippingCrateBlockEntity.this.playSound(blockState, SoundEvents.BARREL_CLOSE);
-            ShippingCrateBlockEntity.this.updateBlockState(blockState, false);
-        }
-
-        protected void openerCountChanged(Level p_155066_, BlockPos p_155067_, BlockState p_155068_, int p_155069_, int p_155070_) {
-        }
-
-        protected boolean isOwnContainer(Player player) {
-            return player.containerMenu instanceof ShippingCrateMenu shippingCrateMenu && shippingCrateMenu.getBlockEntity() == ShippingCrateBlockEntity.this;
-        }
-    };
+    private final ContainerOpenersCounter openersCounter = createOpenersCounter();
 
     public ShippingCrateBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.SHIPPING_CRATE.get(), pos, blockState, ShippingCrate.SLOTS);
@@ -152,23 +136,24 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
 
     // <OpenersCounter>
 
-    public void startOpen(Player player) {
-        if (!this.remove && !player.isSpectator())
-            this.openersCounter.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+    @Override
+    public ContainerOpenersCounter getOpenersCounter() {
+        return openersCounter;
     }
 
-    public void stopOpen(Player player) {
-        if (!this.remove && !player.isSpectator())
-            this.openersCounter.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+    @Override
+    public boolean isValidContainer(Player player) {
+        return player.containerMenu instanceof ShippingCrateMenu shippingCrateMenu && shippingCrateMenu.getBlockEntity() == ShippingCrateBlockEntity.this;
     }
 
-    public void recheckOpen() {
-        if (!this.remove)
-            this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
+    @Override
+    public void onContainerOpen(Level level, BlockPos pos, BlockState state) {
+        playSound(state, SoundEvents.BARREL_OPEN);
     }
 
-    private void updateBlockState(@NotNull BlockState blockState, boolean isOpen) {
-        this.level.setBlock(this.getBlockPos(), blockState.setValue(BarrelBlock.OPEN, isOpen), Block.UPDATE_ALL);
+    @Override
+    public void onContainerClosed(Level level, BlockPos pos, BlockState state) {
+        playSound(state, SoundEvents.BARREL_CLOSE);
     }
 
     private void playSound(@NotNull BlockState pState, SoundEvent pSound) {

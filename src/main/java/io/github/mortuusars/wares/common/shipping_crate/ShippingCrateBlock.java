@@ -1,7 +1,5 @@
 package io.github.mortuusars.wares.common.shipping_crate;
 
-import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelBlockEntity;
-import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.core.ware.WareUtils;
 import io.github.mortuusars.wares.setup.ModItems;
@@ -21,6 +19,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
@@ -64,11 +63,14 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
         return new ShippingCrateBlockEntity(pos, state);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(@NotNull BlockState oldBlockState, Level level, @NotNull BlockPos pos, @NotNull BlockState newBlockState, boolean isMoving) {
-        if (!level.isClientSide && !oldBlockState.is(newBlockState.getBlock()) && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
-            Containers.dropContents(level, pos, shippingCrateEntity);
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
+
+    @Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
             Ware ware = shippingCrateEntity.getWare();
             if (ware != null){
                 ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
@@ -76,6 +78,14 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), request);
             }
         }
+        super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onRemove(@NotNull BlockState oldBlockState, Level level, @NotNull BlockPos pos, @NotNull BlockState newBlockState, boolean isMoving) {
+        if (!level.isClientSide && !oldBlockState.is(newBlockState.getBlock()) && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity)
+            Containers.dropContents(level, pos, shippingCrateEntity);
 
         super.onRemove(oldBlockState, level, pos, newBlockState, isMoving);
     }

@@ -1,23 +1,18 @@
 package io.github.mortuusars.wares;
 
 import com.mojang.logging.LogUtils;
-import io.github.mortuusars.wares.common.payment_parcel.PaymentParcel;
-import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelBlockEntity;
+import io.github.mortuusars.wares.common.parcel.Parcel;
+import io.github.mortuusars.wares.common.parcel.ParcelBlockEntity;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
 import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlockEntity;
 import io.github.mortuusars.wares.core.Delivery;
 import io.github.mortuusars.wares.core.ware.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WareProgression {
     public static void shipWare(Ware ware, Player player, Level level, BlockPos pos, ShippingCrate.Shipping shippingResult) {
@@ -44,7 +39,7 @@ public class WareProgression {
 
         level.setBlock(pos, parcelBlockState, Block.UPDATE_ALL);
 
-        if ( !(level.getBlockEntity(pos) instanceof PaymentParcelBlockEntity parcelEntity) ){
+        if ( !(level.getBlockEntity(pos) instanceof ParcelBlockEntity parcelEntity) ){
             level.removeBlock(pos, false);
             LogUtils.getLogger().error("Failed to place payment parcel: PaymentParcelBlockEntity was not found on pos '{}'", pos);
             return;
@@ -56,7 +51,7 @@ public class WareProgression {
 
         int index = 0;
         for(var stack : delivery.ware.getPaymentStacks()){
-            if (index >= PaymentParcel.SLOTS)
+            if (index >= Parcel.SLOTS)
                 break;
 
             parcelEntity.setItem(index, stack);

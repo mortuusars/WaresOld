@@ -91,7 +91,7 @@ public class ShippingCrate {
 
         if (level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity){
             if (level.isClientSide)
-                spawnConvertedParticles(level, pos);
+                spawnConvertedParticles(level, pos, 25);
 
             Vector3f blockC = PosUtils.blockCenter(pos);
             level.playSound(player, blockC.x(), blockC.y(), blockC.z(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 0.5f, 1f);
@@ -121,9 +121,9 @@ public class ShippingCrate {
         return stacks;
     }
 
-    private static void spawnConvertedParticles(Level level, BlockPos pos){
+    public static void spawnConvertedParticles(Level level, BlockPos pos, int count){
         Random r = level.getRandom();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < count; i++) {
             double x = pos.getX() + 0.5d + r.nextFloat(-0.7f, 0.7f);
             double y = pos.getY() + 0.8d + r.nextFloat(-0.7f, 0.7f);
             double z = pos.getZ() + 0.5d + r.nextFloat(-0.7f, 0.7f);

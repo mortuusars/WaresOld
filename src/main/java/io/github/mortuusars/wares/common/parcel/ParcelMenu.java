@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.common.payment_parcel;
+package io.github.mortuusars.wares.common.parcel;
 
 import io.github.mortuusars.wares.common.base.WaresAbstractContainerMenu;
 import io.github.mortuusars.wares.setup.ModBlocks;
@@ -14,17 +14,17 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class PaymentParcelMenu extends WaresAbstractContainerMenu {
+public class ParcelMenu extends WaresAbstractContainerMenu {
 
     private final Inventory playerInventory;
     private final Level level;
-    private final PaymentParcelBlockEntity blockEntity;
+    private final ParcelBlockEntity blockEntity;
 
-    public PaymentParcelMenu(int containerId, Inventory playerInventory, BlockPos pos) {
+    public ParcelMenu(int containerId, Inventory playerInventory, BlockPos pos) {
         super(ModContainers.PAYMENT_PARCEL.get(), containerId);
         this.playerInventory = playerInventory;
         this.level = playerInventory.player.getLevel();
-        this.blockEntity = (PaymentParcelBlockEntity) level.getBlockEntity(pos);
+        this.blockEntity = (ParcelBlockEntity) level.getBlockEntity(pos);
 
         assert blockEntity != null;
         blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
@@ -54,7 +54,7 @@ public class PaymentParcelMenu extends WaresAbstractContainerMenu {
         blockEntity.stopOpen(player);
     }
 
-    public PaymentParcelBlockEntity getBlockEntity(){
+    public ParcelBlockEntity getBlockEntity(){
         return blockEntity;
     }
 
@@ -65,11 +65,11 @@ public class PaymentParcelMenu extends WaresAbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack slotItemStack = slot.getItem();
             itemstack = slotItemStack.copy();
-            if (index < PaymentParcel.SLOTS){
-                if (!this.moveItemStackTo(slotItemStack, PaymentParcel.SLOTS, this.slots.size(), true))
+            if (index < Parcel.SLOTS){
+                if (!this.moveItemStackTo(slotItemStack, Parcel.SLOTS, this.slots.size(), true))
                     return ItemStack.EMPTY;
             }
-            else if (!this.moveItemStackTo(slotItemStack, 0, PaymentParcel.SLOTS, false))
+            else if (!this.moveItemStackTo(slotItemStack, 0, Parcel.SLOTS, false))
                 return ItemStack.EMPTY;
 
 

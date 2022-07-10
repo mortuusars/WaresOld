@@ -2,7 +2,7 @@ package io.github.mortuusars.wares.setup;
 
 import io.github.mortuusars.wares.common.crate.CrateBlock;
 import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlock;
-import io.github.mortuusars.wares.common.payment_parcel.PaymentParcelBlock;
+import io.github.mortuusars.wares.common.parcel.ParcelBlock;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -20,8 +20,8 @@ public class ModBlocks {
     public static final RegistryObject<DeliveryNoteBlock> DELIVERY_NOTE = Registries.BLOCKS.register("delivery_note",
             () -> new DeliveryNoteBlock(BlockBehaviour.Properties.of(Material.CACTUS).sound(SoundType.AZALEA).noOcclusion()));
 
-    public static final RegistryObject<PaymentParcelBlock> PAYMENT_PARCEL = Registries.BLOCKS.register("payment_parcel",
-            () -> new PaymentParcelBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.SPORE_BLOSSOM).noOcclusion()));
+    public static final RegistryObject<ParcelBlock> PAYMENT_PARCEL = Registries.BLOCKS.register("payment_parcel",
+            () -> new ParcelBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.SPORE_BLOSSOM).noOcclusion()));
 
     public static void register() { }
 }
