@@ -5,22 +5,14 @@ import com.mojang.datafixers.util.Pair;
 import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
 import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
-import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
-import io.github.mortuusars.wares.core.ware.Ware;
-import net.minecraft.ChatFormatting;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScreen> {
 

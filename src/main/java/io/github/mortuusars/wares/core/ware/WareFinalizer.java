@@ -3,7 +3,7 @@ package io.github.mortuusars.wares.core.ware;
 import com.mojang.datafixers.util.Either;
 import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.core.types.IntegerRange;
-import io.github.mortuusars.wares.core.ware.item.WareItem;
+import io.github.mortuusars.wares.core.ware.data.*;
 import io.github.mortuusars.wares.lib.ModConstants;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

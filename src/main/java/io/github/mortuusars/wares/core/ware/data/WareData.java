@@ -1,15 +1,17 @@
-package io.github.mortuusars.wares.core.ware;
+package io.github.mortuusars.wares.core.ware.data;
 
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mortuusars.wares.core.types.IntegerRange;
-import io.github.mortuusars.wares.core.ware.item.WareItem;
 import io.github.mortuusars.wares.lib.enums.Rarity;
 
 import java.util.List;
 
+/*
+Represents a potential ware.
+ */
 public record WareData(WareDescription description, Rarity rarity, int weight,
                        List<WareItem> requestedItems, List<WareItem> paymentItems,
                        Either<Integer, IntegerRange> experience, DeliveryTimeData deliveryTime) {

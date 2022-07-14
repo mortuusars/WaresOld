@@ -3,8 +3,7 @@ package io.github.mortuusars.wares.common.shipping_crate;
 import com.mojang.datafixers.util.Pair;
 import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
 import io.github.mortuusars.wares.common.base.WaresAbstractContainerMenu;
-import io.github.mortuusars.wares.core.ware.Ware;
-import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModContainers;
 import net.minecraft.core.BlockPos;
@@ -19,9 +18,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShippingCrateMenu extends WaresAbstractContainerMenu {
     private final ShippingCrateBlockEntity blockEntity;

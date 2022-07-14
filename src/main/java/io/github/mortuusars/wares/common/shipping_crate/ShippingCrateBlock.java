@@ -1,7 +1,6 @@
 package io.github.mortuusars.wares.common.shipping_crate;
 
-import io.github.mortuusars.wares.core.ware.Ware;
-import io.github.mortuusars.wares.core.ware.WareUtils;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -74,7 +73,7 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
             Ware ware = shippingCrateEntity.getWare();
             if (ware != null){
                 ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
-                WareUtils.saveToStackNBT(ware, request);
+                Ware.writeAsNBT(request, ware);
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), request);
             }
         }

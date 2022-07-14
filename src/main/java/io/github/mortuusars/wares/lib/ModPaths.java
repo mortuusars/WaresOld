@@ -1,7 +1,6 @@
 package io.github.mortuusars.wares.lib;
 
 import io.github.mortuusars.wares.Wares;
-import io.github.mortuusars.wares.core.ware.Ware;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.loading.FileUtils;

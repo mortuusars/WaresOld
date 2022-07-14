@@ -1,12 +1,10 @@
-package io.github.mortuusars.wares;
+package io.github.mortuusars.wares.core.ware;
 
 import com.mojang.logging.LogUtils;
-import io.github.mortuusars.wares.common.parcel.Parcel;
 import io.github.mortuusars.wares.common.parcel.ParcelBlockEntity;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
 import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlockEntity;
-import io.github.mortuusars.wares.core.Delivery;
-import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;

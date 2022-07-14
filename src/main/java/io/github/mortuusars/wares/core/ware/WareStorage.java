@@ -1,16 +1,13 @@
-package io.github.mortuusars.wares;
+package io.github.mortuusars.wares.core.ware;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import io.github.mortuusars.wares.core.WareDataLoader;
-import io.github.mortuusars.wares.core.ware.*;
+import io.github.mortuusars.wares.Wares;
+import io.github.mortuusars.wares.core.ware.data.Ware;
+import io.github.mortuusars.wares.core.ware.data.WareData;
 import io.github.mortuusars.wares.lib.ModPaths;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,11 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
 
 import static io.github.mortuusars.wares.Wares.LOGGER;
 
@@ -57,7 +52,7 @@ public class WareStorage implements PreparableReloadListener {
         return Optional.empty();
     }
 
-    public void loadWares(){
+    public void reloadWares(){
         LOGGER.info("Loading wares...");
 
         WareDataLoader wareDataLoader = new WareDataLoader();
@@ -93,7 +88,7 @@ public class WareStorage implements PreparableReloadListener {
 
     @Override
     public @NotNull CompletableFuture<Void> reload(PreparationBarrier pPreparationBarrier, ResourceManager pResourceManager, ProfilerFiller pPreparationsProfiler, ProfilerFiller pReloadProfiler, Executor pBackgroundExecutor, Executor pGameExecutor) {
-        return CompletableFuture.allOf(CompletableFuture.runAsync(this::loadWares, pBackgroundExecutor))
+        return CompletableFuture.allOf(CompletableFuture.runAsync(this::reloadWares, pBackgroundExecutor))
                 .thenCompose(pPreparationBarrier::wait);
     }
 }

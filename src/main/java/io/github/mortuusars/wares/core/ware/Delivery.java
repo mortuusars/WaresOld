@@ -1,6 +1,6 @@
-package io.github.mortuusars.wares.core;
+package io.github.mortuusars.wares.core.ware;
 
-import io.github.mortuusars.wares.core.ware.Ware;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 

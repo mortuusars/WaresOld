@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 
 import java.util.Random;
 
-public record IntegerRange(int min, int max, int step) implements IntNumberProvider {
+public record IntegerRange(int min, int max, int step) {
 
     public static final Codec<IntegerRange> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(1, Integer.MAX_VALUE).fieldOf("min").forGetter(IntegerRange::min),
@@ -22,7 +22,6 @@ public record IntegerRange(int min, int max, int step) implements IntNumberProvi
         Preconditions.checkArgument(step > 0, "Step cannot be less than 0. Value: {}", step);
     }
 
-    @Override
     public int get(Random random) {
         if (min == max)
             return min;

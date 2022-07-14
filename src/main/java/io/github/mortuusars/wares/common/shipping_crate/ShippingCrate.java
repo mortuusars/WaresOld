@@ -2,10 +2,7 @@ package io.github.mortuusars.wares.common.shipping_crate;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
-import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlockEntity;
-import io.github.mortuusars.wares.core.ware.Ware;
-import io.github.mortuusars.wares.core.ware.WareUtils;
-import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import io.github.mortuusars.wares.setup.ModItems;
 import io.github.mortuusars.wares.utils.PosUtils;
@@ -29,7 +26,6 @@ import net.minecraftforge.items.IItemHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ShippingCrate {
@@ -44,13 +40,13 @@ public class ShippingCrate {
             throw new IllegalArgumentException(String.format("heldItemStack should be '%s'. Value: %s1",
                     ModItems.PURCHASE_REQUEST.get().getRegistryName(), heldItemStack.getItem().getRegistryName()));
 
-        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(heldItemStack);
-        if (wareOptional.isEmpty()){
-            LogUtils.getLogger().error("Cannot convert '{}' to Shipping Crate: Ware was not deserialized.", clickedBlockState);
-            return;
-        }
+//        Optional<Ware> wareOptional = WareUtils.readWareFromStackNBT(heldItemStack);
+//        if (wareOptional.isEmpty()){
+//            LogUtils.getLogger().error("Cannot convert '{}' to Shipping Crate: Ware was not deserialized.", clickedBlockState);
+//            return;
+//        }
 
-        Ware ware = wareOptional.get();
+//        Ware ware = wareOptional.get();
 
 //        if (level.isClientSide){
 //            //TODO sound
@@ -75,7 +71,7 @@ public class ShippingCrate {
                 var shippingCrateEntity = (ShippingCrateBlockEntity)level.getBlockEntity(pos);
                 if (shippingCrateEntity == null)
                     throw new IllegalStateException("ShippingCrate should have its block entity after block is placed.");
-                shippingCrateEntity.setWare(ware);
+//                shippingCrateEntity.setWare(ware);
 
                 // Transfer previous block's items to shipping crate slots:
                 for (int i = 0; i < Math.min(oldItems.size(), SLOTS); i++) {

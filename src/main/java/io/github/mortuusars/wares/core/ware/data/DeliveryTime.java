@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.core.ware;
+package io.github.mortuusars.wares.core.ware.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.core.ware;
+package io.github.mortuusars.wares.core.ware.data;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;

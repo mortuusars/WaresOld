@@ -1,9 +1,9 @@
-package io.github.mortuusars.wares.core;
+package io.github.mortuusars.wares.core.ware;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import io.github.mortuusars.wares.core.ware.WareData;
+import io.github.mortuusars.wares.core.ware.data.WareData;
 import net.minecraft.util.GsonHelper;
 
 import java.util.Optional;

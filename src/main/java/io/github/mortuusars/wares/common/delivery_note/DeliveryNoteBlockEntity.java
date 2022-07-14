@@ -1,12 +1,9 @@
 package io.github.mortuusars.wares.common.delivery_note;
 
-import io.github.mortuusars.wares.WareProgression;
-import io.github.mortuusars.wares.core.Delivery;
+import io.github.mortuusars.wares.core.ware.WareProgression;
+import io.github.mortuusars.wares.core.ware.Delivery;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

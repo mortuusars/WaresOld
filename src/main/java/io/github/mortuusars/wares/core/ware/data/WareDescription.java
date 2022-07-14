@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.core.ware;
+package io.github.mortuusars.wares.core.ware.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,4 +14,12 @@ public record WareDescription(String title, String message, String buyer, boolea
 
     public static WareDescription EMPTY = new WareDescription("", "", "", true);
 
+    @Override
+    public String toString() {
+        return "WareDescription{" + "title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                ", buyer='" + buyer + '\'' +
+                ", randomBuyer=" + randomBuyer +
+                '}';
+    }
 }

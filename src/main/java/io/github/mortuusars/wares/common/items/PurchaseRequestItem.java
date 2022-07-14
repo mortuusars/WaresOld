@@ -1,12 +1,10 @@
 package io.github.mortuusars.wares.common.items;
 
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
-import io.github.mortuusars.wares.core.ware.Ware;
-import io.github.mortuusars.wares.core.ware.WareUtils;
+import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModTags;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
@@ -23,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PurchaseRequestItem extends Item {
     public PurchaseRequestItem(Properties pProperties) {
@@ -32,11 +29,9 @@ public class PurchaseRequestItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-        Optional<Ware> ware = WareUtils.readWareFromStackNBT(stack);
-        ware.ifPresent(w -> {
+        Ware.readFromNBT(stack).ifPresent(w -> {
             components.add(new TextComponent(""));
-            NonNullList<Component> wareTooltipInfo = WareUtils.getWareTooltipInfo(w);
-            components.addAll(wareTooltipInfo);
+            components.addAll(w.createTooltipInfo());
         });
     }
 

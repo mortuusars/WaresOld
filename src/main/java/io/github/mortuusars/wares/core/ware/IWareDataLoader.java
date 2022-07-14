@@ -1,6 +1,6 @@
-package io.github.mortuusars.wares.core;
+package io.github.mortuusars.wares.core.ware;
 
-import io.github.mortuusars.wares.core.ware.WareData;
+import io.github.mortuusars.wares.core.ware.data.WareData;
 
 import java.util.Optional;
 
