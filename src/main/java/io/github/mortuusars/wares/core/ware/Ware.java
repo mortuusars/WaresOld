@@ -1,7 +1,11 @@
 package io.github.mortuusars.wares.core.ware;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.mortuusars.wares.core.ware.item.FixedWareItemInfo;
-import io.github.mortuusars.wares.core.types.IntRange;
+import io.github.mortuusars.wares.core.types.IntegerRange;
+import io.github.mortuusars.wares.core.ware.item.WareItem;
+import io.github.mortuusars.wares.lib.enums.Rarity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 
@@ -9,80 +13,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class Ware {
-    public String title = "";
-    public String description = "";
-    public String buyer = "";
-    public int experience = 0;
-    public IntRange deliveryTime = IntRange.ZERO;
-    public int deliveryDays = 0;
-    public List<FixedWareItemInfo> requestedItems = Collections.emptyList();
-    public List<FixedWareItemInfo> paymentItems = Collections.emptyList();
+public record Ware(WareDescription description, Rarity rarity,
+                        List<WareItem> requestedItems, List<ItemStack> paymentItems,
+                        int experience, DeliveryTime deliveryTime) {
 
-    public Optional<FixedWareItemInfo> getMatchingRequestedItem(ItemStack stack){
-        for (var reqItem : requestedItems){
-            if (reqItem.matches(stack))
-                return Optional.of(reqItem);
-        }
+    public static final Codec<Ware> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    WareDescription.CODEC.optionalFieldOf("description", WareDescription.EMPTY).forGetter(Ware::description),
+                    Rarity.CODEC.fieldOf("rarity").orElse(Rarity.COMMON).forGetter(Ware::rarity),
+                    WareItem.CODEC.listOf().fieldOf("requestedItems").forGetter(Ware::requestedItems),
+                    ItemStack.CODEC.listOf().fieldOf("paymentItems").forGetter(Ware::paymentItems),
+                    Codec.INT.fieldOf("experience").forGetter(Ware::experience),
+                    DeliveryTime.CODEC.fieldOf("deliveryTime").forGetter(Ware::deliveryTime))
+            .apply(instance, Ware::new));
 
-        return Optional.empty();
-    }
-
-    public NonNullList<ItemStack> getPaymentStacks(){
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        for (var item : paymentItems)
-            stacks.add(item.toItemStack());
-        return stacks;
-    }
-
-
-    public Ware title(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public Ware description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public Ware buyer(String buyer) {
-        this.buyer = buyer;
-        return this;
-    }
-
-    public Ware experience(int experience) {
-        this.experience = experience;
-        return this;
-    }
-
-    public Ware deliveryTimeRange(int min, int max){
-        this.deliveryTime = new IntRange(min, max);
-        return this;
-    }
-
-    public Ware deliveryDays(int days){
-        this.deliveryDays = days;
-        return this;
-    }
-
-    public Ware addRequested(FixedWareItemInfo requestedItem) {
-        requestedItems.add(requestedItem);
-        return this;
-    }
-
-    public Ware addPayment(FixedWareItemInfo paymentItem) {
-        paymentItems.add(paymentItem);
-        return this;
-    }
-
-    public Ware setRequestedItems(List<FixedWareItemInfo> requestedItems) {
-        this.requestedItems = requestedItems;
-        return this;
-    }
-
-    public Ware setPaymentItems(List<FixedWareItemInfo> paymentItems) {
-        this.paymentItems = paymentItems;
-        return this;
-    }
 }

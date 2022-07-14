@@ -56,11 +56,12 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
 
     public void setWare(@NotNull Ware ware){
         this.ware = ware;
-        requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
+//        requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
     }
 
     public NonNullList<ItemStack> getPaymentItems() {
-        return ware.getPaymentStacks();
+        return NonNullList.create();
+//        return ware.getPaymentStacks();
     }
 
     public float getProgressPercentage(){
@@ -81,21 +82,21 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
             return;
         }
 
-        Map<FixedWareItemInfo, Integer> requestedAndCounts = new HashMap<>();
-        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
-            ItemStack stack = this.getItem(i);
-            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
-                if (requestedAndCounts.containsKey(item)){
-                    int newCount = requestedAndCounts.get(item) + stack.getCount();
-                    requestedAndCounts.put(item, newCount);
-                }
-                else {
-                    requestedAndCounts.put(item, stack.getCount());
-                }
-            });
-        }
-
-        fulfilledCount = requestedAndCounts.values().stream().mapToInt(i -> i).sum();
+//        Map<FixedWareItemInfo, Integer> requestedAndCounts = new HashMap<>();
+//        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
+//            ItemStack stack = this.getItem(i);
+//            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
+//                if (requestedAndCounts.containsKey(item)){
+//                    int newCount = requestedAndCounts.get(item) + stack.getCount();
+//                    requestedAndCounts.put(item, newCount);
+//                }
+//                else {
+//                    requestedAndCounts.put(item, stack.getCount());
+//                }
+//            });
+//        }
+//
+//        fulfilledCount = requestedAndCounts.values().stream().mapToInt(i -> i).sum();
     }
 
 

@@ -125,25 +125,26 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
         if (ware == null)
             return Pair.of(0,0);
 
-        Map<FixedWareItemInfo, Integer> requested = new HashMap<>();
-        int requestedCount = ware.requestedItems.stream().mapToInt(i -> i.count).sum();
-        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
-            ItemStack stack = this.slots.get(i).getItem();
-            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
-                if (requested.containsKey(item)){
-                    int newCount = requested.get(item) + stack.getCount();
-                    requested.put(item, newCount);
-                }
-                else {
-                    requested.put(item, stack.getCount());
-                }
-            });
-        }
+        //TODO: this
+//        Map<FixedWareItemInfo, Integer> requested = new HashMap<>();
+//        int requestedCount = ware.requestedItems().stream().mapToInt(i -> i.count).sum();
+//        for (int i = 0; i < ShippingCrate.SLOTS; i++) {
+//            ItemStack stack = this.slots.get(i).getItem();
+//            ware.getMatchingRequestedItem(stack).ifPresent(item -> {
+//                if (requested.containsKey(item)){
+//                    int newCount = requested.get(item) + stack.getCount();
+//                    requested.put(item, newCount);
+//                }
+//                else {
+//                    requested.put(item, stack.getCount());
+//                }
+//            });
+//        }
 
-        int currentCount = 0;
-        for (var reqItem : requested.entrySet())
-            currentCount += Math.min(reqItem.getKey().count, reqItem.getValue());
+//        int currentCount = 0;
+//        for (var reqItem : requested.entrySet())
+//            currentCount += Math.min(reqItem.getKey().count, reqItem.getValue());
 
-        return Pair.of(requestedCount, currentCount);
+        return Pair.of(/*requestedCount*/1, /*currentCount*/ 2);
     }
 }

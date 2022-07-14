@@ -20,7 +20,7 @@ public class WareProgression {
 
         Delivery delivery = new Delivery(ware);
         delivery.excessItems = shippingResult.excessItems;
-        delivery.deliveryTime = ware.deliveryTime.getRandom(level.random);
+//        delivery.deliveryTime = ware.deliveryTime.getRandom(level.random);
         delivery.shippingDay = (int)(level.getDayTime() % 24000);
 
         level.setBlock(pos, noteBlockState, Block.UPDATE_ALL);
@@ -50,13 +50,13 @@ public class WareProgression {
         }
 
         int index = 0;
-        for(var stack : delivery.ware.getPaymentStacks()){
-            if (index >= Parcel.SLOTS)
-                break;
-
-            parcelEntity.setItem(index, stack);
-            index++;
-        }
+//        for(var stack : delivery.ware.getPaymentStacks()){
+//            if (index >= Parcel.SLOTS)
+//                break;
+//
+//            parcelEntity.setItem(index, stack);
+//            index++;
+//        }
 
 //        List<ItemStack> items = new ArrayList<>();
 //

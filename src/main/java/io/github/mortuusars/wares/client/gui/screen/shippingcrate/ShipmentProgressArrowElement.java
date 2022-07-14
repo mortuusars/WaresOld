@@ -62,34 +62,34 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
         Pair<Integer, Integer> progress = screen.getMenu().getProgress();
         ArrayList<Component> tooltipComponents = new ArrayList<>();
 
-        if (ware == null)
-            tooltipComponents.add(new TextComponent(Math.min(progress.getFirst(), progress.getSecond()) + " / " + progress.getFirst()));
-        else {
-            for (var reqItem : ware.requestedItems){
-                Component itemComponent = reqItem.isTag() ?
-                        new TextComponent("#" + reqItem.tag)
-                        : reqItem.getItem().orElse(Items.AIR).getName(ItemStack.EMPTY);
-
-                int currentCount = 0;
-                for (int i = 0; i < ShippingCrate.SLOTS; i++) {
-                    ItemStack stack = screen.getMenu().slots.get(i).getItem();
-                    if (reqItem.matches(stack))
-                        currentCount += stack.getCount();
-                }
-
-                ((BaseComponent) itemComponent).append(new TextComponent(" " + currentCount + "/" + reqItem.count)
-                        .withStyle(reqItem.count > currentCount ? ChatFormatting.DARK_RED : ChatFormatting.DARK_GREEN));
-
-                tooltipComponents.add(itemComponent);
-            }
-        }
-
-        if (progress.getSecond() >= progress.getFirst()){
-            tooltipComponents.add(new TextComponent(""));
-            tooltipComponents.add(new TranslatableComponent("gui.shipping_crate.ready_to_ship").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
-        }
-
-        screen.renderTooltip(poseStack, tooltipComponents, Optional.empty(), mouseX, mouseY, screen.getFontRenderer());
+//        if (ware == null)
+//            tooltipComponents.add(new TextComponent(Math.min(progress.getFirst(), progress.getSecond()) + " / " + progress.getFirst()));
+//        else {
+//            for (var reqItem : ware.requestedItems){
+//                Component itemComponent = reqItem.isTag() ?
+//                        new TextComponent("#" + reqItem.tag)
+//                        : reqItem.getItem().orElse(Items.AIR).getName(ItemStack.EMPTY);
+//
+//                int currentCount = 0;
+//                for (int i = 0; i < ShippingCrate.SLOTS; i++) {
+//                    ItemStack stack = screen.getMenu().slots.get(i).getItem();
+//                    if (reqItem.matches(stack))
+//                        currentCount += stack.getCount();
+//                }
+//
+//                ((BaseComponent) itemComponent).append(new TextComponent(" " + currentCount + "/" + reqItem.count)
+//                        .withStyle(reqItem.count > currentCount ? ChatFormatting.DARK_RED : ChatFormatting.DARK_GREEN));
+//
+//                tooltipComponents.add(itemComponent);
+//            }
+//        }
+//
+//        if (progress.getSecond() >= progress.getFirst()){
+//            tooltipComponents.add(new TextComponent(""));
+//            tooltipComponents.add(new TranslatableComponent("gui.shipping_crate.ready_to_ship").withStyle(ChatFormatting.GREEN).withStyle(ChatFormatting.BOLD));
+//        }
+//
+//        screen.renderTooltip(poseStack, tooltipComponents, Optional.empty(), mouseX, mouseY, screen.getFontRenderer());
     }
 
     @Override

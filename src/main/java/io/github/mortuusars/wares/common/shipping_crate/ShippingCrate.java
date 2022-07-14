@@ -133,36 +133,39 @@ public class ShippingCrate {
     }
 
     public static Shipping getShippingResult(Ware ware, NonNullList<ItemStack> items){
-        Map<FixedWareItemInfo, Integer> requested = ware.requestedItems.stream().collect(Collectors.toMap(i -> i, i -> 0));
-        NonNullList<ItemStack> excessItems = NonNullList.create();
 
-        for (FixedWareItemInfo wareItemInfo : ware.requestedItems){
-            for (int i = items.size() - 1; i >= 0 ; i--) {
-                ItemStack stack = items.get(i);
-                if (wareItemInfo.matches(stack)){
-                    int requestedItemCount = wareItemInfo.getCount();
-                    int currentCount = requested.get(wareItemInfo) + stack.getCount();
+        return new Shipping(NonNullList.of(ItemStack.EMPTY), NonNullList.of(ItemStack.EMPTY), false);
 
-                    if (currentCount >= requestedItemCount){
-                        ItemStack excessStack = stack.copy();
-                        excessStack.setCount(stack.getCount() - (requestedItemCount - currentCount));
-                        excessItems.add(excessStack);
-                    }
-
-                    requested.put(wareItemInfo, Math.min(currentCount, requestedItemCount));
-                }
-            }
-        }
-
-        boolean isFulfilled = true;
-        for (var req : requested.entrySet()){
-            if (req.getKey().count > req.getValue()) {
-                isFulfilled = false;
-                break;
-            }
-        }
-
-        return new Shipping(ware.getPaymentStacks(), excessItems, isFulfilled);
+//        Map<FixedWareItemInfo, Integer> requested = ware.requestedItems.stream().collect(Collectors.toMap(i -> i, i -> 0));
+//        NonNullList<ItemStack> excessItems = NonNullList.create();
+//
+//        for (FixedWareItemInfo wareItemInfo : ware.requestedItems){
+//            for (int i = items.size() - 1; i >= 0 ; i--) {
+//                ItemStack stack = items.get(i);
+//                if (wareItemInfo.matches(stack)){
+//                    int requestedItemCount = wareItemInfo.getCount();
+//                    int currentCount = requested.get(wareItemInfo) + stack.getCount();
+//
+//                    if (currentCount >= requestedItemCount){
+//                        ItemStack excessStack = stack.copy();
+//                        excessStack.setCount(stack.getCount() - (requestedItemCount - currentCount));
+//                        excessItems.add(excessStack);
+//                    }
+//
+//                    requested.put(wareItemInfo, Math.min(currentCount, requestedItemCount));
+//                }
+//            }
+//        }
+//
+//        boolean isFulfilled = true;
+//        for (var req : requested.entrySet()){
+//            if (req.getKey().count > req.getValue()) {
+//                isFulfilled = false;
+//                break;
+//            }
+//        }
+//
+//        return new Shipping(ware.getPaymentStacks(), excessItems, isFulfilled);
     }
 
     public static class Shipping {
