@@ -12,10 +12,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("NullableProblems")
 public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider, IOpenersCounter {
+
+    public static final MutableComponent DISPLAY_NAME = new TranslatableComponent("container.shipping_crate");
 
     private Ware ware;
 
@@ -120,7 +124,7 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
 
     @Override
     public @NotNull Component getDisplayName() {
-        return new TranslatableComponent("container.shipping_crate");
+        return DISPLAY_NAME;
     }
 
     @Nullable
@@ -176,5 +180,10 @@ public class ShippingCrateBlockEntity extends InventoryBlockEntity implements Me
         super.saveAdditional(tag);
 //        WareUtils.serialize(ware).ifPresentOrElse(w -> tag.putString("Ware", w),
 //                () -> LogUtils.getLogger().error("Ware would not be saved in a block entity. Value: " + ware));
+    }
+
+    public void onBlockRemoved(BlockState oldState, BlockState newState){
+        if (level != null)
+            Containers.dropContents(level, worldPosition, this);
     }
 }

@@ -2,8 +2,7 @@ package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
-import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.base.ScreenElement;
 import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import net.minecraft.client.player.LocalPlayer;

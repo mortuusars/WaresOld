@@ -1,6 +1,7 @@
 package io.github.mortuusars.wares.data.providers;
 
 import io.github.mortuusars.wares.Wares;
+import io.github.mortuusars.wares.common.mailbox.MailboxBlock;
 import io.github.mortuusars.wares.setup.ModBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,14 @@ public class ModBlockStatesProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+
+        horizontalBlock(ModBlocks.MAILBOX.get(), state -> switch (state.getValue(MailboxBlock.FILL_LEVEL)) {
+            case 1 -> models().getExistingFile(modLoc("block/mailbox_low"));
+            case 2 -> models().getExistingFile(modLoc("block/mailbox_medium"));
+            case 3 -> models().getExistingFile(modLoc("block/mailbox_full"));
+            default -> models().getExistingFile(modLoc("block/mailbox_empty"));
+        });
+
         crate();
 
         BlockModelBuilder shippingCrateModel = models()

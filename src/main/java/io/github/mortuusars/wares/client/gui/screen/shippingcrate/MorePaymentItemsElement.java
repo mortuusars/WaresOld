@@ -1,8 +1,7 @@
 package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
-import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.base.ScreenElement;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;

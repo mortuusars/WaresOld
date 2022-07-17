@@ -19,6 +19,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        withExistingParent(itemPath(ModItems.MAILBOX), modLoc("block/" + blockPath(ModBlocks.MAILBOX) + "_full"));
         withExistingParent(itemPath(ModItems.CRATE), modLoc("block/" + blockPath(ModBlocks.CRATE)));
         withExistingParent(itemPath(ModItems.SHIPPING_CRATE), modLoc("block/" + blockPath(ModBlocks.SHIPPING_CRATE)));
 

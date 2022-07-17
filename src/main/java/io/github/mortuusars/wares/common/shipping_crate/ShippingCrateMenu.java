@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.common.shipping_crate;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShippingCrateScreen;
 import io.github.mortuusars.wares.common.base.WaresAbstractContainerMenu;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
@@ -41,10 +41,10 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
         blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(
             handler -> {
                 addContainerSlots(handler, 0,18);
-                addPlayerInventory(this.playerInventory, 9, 26, 131);
-                addPlayerHotbar(this.playerInventory, 0, 26, 189);
             });
 
+        addPlayerInventory(this.playerInventory, 9, 26, 131);
+        addPlayerHotbar(this.playerInventory, 0, 26, 189);
 
 
         ware = blockEntity.getWare();

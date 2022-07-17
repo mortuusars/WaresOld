@@ -1,9 +1,7 @@
-package io.github.mortuusars.wares.client.gui.screen;
+package io.github.mortuusars.wares.client.gui.screen.base;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.client.gui.screen.util.Cursor;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -12,9 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.GuiUtils;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +34,15 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
         return elements.get(index);
     }
 
-    public void removeElement(ScreenElement<?> element){
-        elements.remove(element);
-        elementsReversed.remove(element);
-    }
-
     public NonNullList<ScreenElement<?>> getElements(){
         NonNullList<ScreenElement<?>> screenElements = NonNullList.create();
         screenElements.addAll(elements);
         return screenElements;
+    }
+
+    public void removeElement(ScreenElement<?> element){
+        elements.remove(element);
+        elementsReversed.remove(element);
     }
 
     public ItemRenderer getItemRenderer(){
@@ -55,6 +51,12 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
 
     public Font getFontRenderer(){
         return this.font;
+    }
+
+    @Override
+    protected void init() {
+        this.inventoryLabelY = this.imageHeight - 94;
+        super.init();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.mortuusars.wares;
 
 import com.mojang.logging.LogUtils;
+import io.github.mortuusars.wares.commands.TimeCommand;
 import io.github.mortuusars.wares.commands.WaresCommand;
 import io.github.mortuusars.wares.core.ware.WareStorage;
 import io.github.mortuusars.wares.setup.ClientSetup;
@@ -42,6 +43,7 @@ public class Wares
 
     public void onRegisterCommands(RegisterCommandsEvent event){
         WaresCommand.register(event.getDispatcher());
+        TimeCommand.register(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
     }
 }

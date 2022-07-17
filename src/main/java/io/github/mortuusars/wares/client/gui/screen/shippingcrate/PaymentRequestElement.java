@@ -1,16 +1,11 @@
 package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.mortuusars.wares.client.gui.screen.ScreenElement;
-import io.github.mortuusars.wares.client.gui.screen.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.base.ScreenElement;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModItems;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public class PaymentRequestElement extends ScreenElement<ShippingCrateScreen> {
 

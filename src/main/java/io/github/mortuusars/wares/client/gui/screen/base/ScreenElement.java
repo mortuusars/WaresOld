@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.client.gui.screen;
+package io.github.mortuusars.wares.client.gui.screen.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.client.gui.screen.util.Cursor;

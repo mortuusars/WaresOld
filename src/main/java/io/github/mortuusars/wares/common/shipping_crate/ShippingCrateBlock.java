@@ -48,9 +48,8 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
 
     @Override
     public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide){
-            ShippingCrateBlockEntity blockEntity = (ShippingCrateBlockEntity) level.getBlockEntity(pos);
-            NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
+            NetworkHooks.openGui((ServerPlayer) player, shippingCrateEntity, pos);
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -70,6 +69,7 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity){
+            // TODO: request is not dropped when removed by other means other than player.
             Ware ware = shippingCrateEntity.getWare();
             if (ware != null){
                 ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
@@ -84,7 +84,7 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
     @Override
     public void onRemove(@NotNull BlockState oldBlockState, Level level, @NotNull BlockPos pos, @NotNull BlockState newBlockState, boolean isMoving) {
         if (!level.isClientSide && !oldBlockState.is(newBlockState.getBlock()) && level.getBlockEntity(pos) instanceof ShippingCrateBlockEntity shippingCrateEntity)
-            Containers.dropContents(level, pos, shippingCrateEntity);
+            shippingCrateEntity.onBlockRemoved(oldBlockState, newBlockState);
 
         super.onRemove(oldBlockState, level, pos, newBlockState, isMoving);
     }

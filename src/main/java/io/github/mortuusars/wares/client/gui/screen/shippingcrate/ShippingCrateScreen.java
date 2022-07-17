@@ -1,8 +1,9 @@
-package io.github.mortuusars.wares.client.gui.screen;
+package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.Wares;
+import io.github.mortuusars.wares.client.gui.screen.base.BaseContainerScreen;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.MorePaymentItemsElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentItemElement;
 import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentRequestElement;

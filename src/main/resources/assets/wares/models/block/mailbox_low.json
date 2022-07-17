@@ -1,0 +1,44 @@
+{
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "block/weathered_copper",
+		"1": "wares:block/mailbox",
+		"2": "wares:block/delivery_note",
+		"particle": "block/weathered_copper"
+	},
+	"elements": [
+		{
+			"from": [5, 10, 4],
+			"to": [9, 12, 4],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [12, 10, 4]},
+			"faces": {
+				"north": {"uv": [0, 4, 4, 6], "texture": "#2"},
+				"south": {"uv": [0, 4, 4, 6], "texture": "#2"}
+			}
+		},
+		{
+			"from": [2, 0, 0],
+			"to": [14, 15, 4],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 15], "texture": "#0"},
+				"east": {"uv": [12, 1, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 1, 12, 16], "texture": "#1"},
+				"west": {"uv": [12, 1, 16, 16], "texture": "#1"},
+				"down": {"uv": [12, 4, 16, 16], "rotation": 90, "texture": "#1"}
+			}
+		},
+		{
+			"from": [1, 15, 0],
+			"to": [15, 16, 5],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 15, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 14, 1], "texture": "#0"},
+				"east": {"uv": [0, 0, 5, 1], "texture": "#0"},
+				"south": {"uv": [0, 0, 14, 1], "texture": "#0"},
+				"west": {"uv": [0, 0, 5, 1], "texture": "#0"},
+				"up": {"uv": [0, 7, 14, 12], "texture": "#0"},
+				"down": {"uv": [1, 1, 15, 6], "texture": "#0"}
+			}
+		}
+	]
+}

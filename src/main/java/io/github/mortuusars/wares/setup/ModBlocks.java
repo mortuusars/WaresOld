@@ -2,6 +2,7 @@ package io.github.mortuusars.wares.setup;
 
 import io.github.mortuusars.wares.common.crate.CrateBlock;
 import io.github.mortuusars.wares.common.delivery_note.DeliveryNoteBlock;
+import io.github.mortuusars.wares.common.mailbox.MailboxBlock;
 import io.github.mortuusars.wares.common.parcel.ParcelBlock;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -11,6 +12,10 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlocks {
+
+    public static final RegistryObject<MailboxBlock> MAILBOX = Registries.BLOCKS.register("mailbox",
+            () -> new MailboxBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.LADDER)));
+
     public static final RegistryObject<CrateBlock> CRATE = Registries.BLOCKS.register("crate",
             () -> new CrateBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).sound(SoundType.LADDER)));
 
