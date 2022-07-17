@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,fill_level=0": {
+      "model": "wares:block/mailbox_empty"
+    },
+    "facing=south,fill_level=0": {
+      "model": "wares:block/mailbox_empty",
+      "y": 180
+    },
+    "facing=west,fill_level=0": {
+      "model": "wares:block/mailbox_empty",
+      "y": 270
+    },
+    "facing=east,fill_level=0": {
+      "model": "wares:block/mailbox_empty",
+      "y": 90
+    },
+    "facing=north,fill_level=1": {
+      "model": "wares:block/mailbox_low"
+    },
+    "facing=south,fill_level=1": {
+      "model": "wares:block/mailbox_low",
+      "y": 180
+    },
+    "facing=west,fill_level=1": {
+      "model": "wares:block/mailbox_low",
+      "y": 270
+    },
+    "facing=east,fill_level=1": {
+      "model": "wares:block/mailbox_low",
+      "y": 90
+    },
+    "facing=north,fill_level=2": {
+      "model": "wares:block/mailbox_medium"
+    },
+    "facing=south,fill_level=2": {
+      "model": "wares:block/mailbox_medium",
+      "y": 180
+    },
+    "facing=west,fill_level=2": {
+      "model": "wares:block/mailbox_medium",
+      "y": 270
+    },
+    "facing=east,fill_level=2": {
+      "model": "wares:block/mailbox_medium",
+      "y": 90
+    },
+    "facing=north,fill_level=3": {
+      "model": "wares:block/mailbox_full"
+    },
+    "facing=south,fill_level=3": {
+      "model": "wares:block/mailbox_full",
+      "y": 180
+    },
+    "facing=west,fill_level=3": {
+      "model": "wares:block/mailbox_full",
+      "y": 270
+    },
+    "facing=east,fill_level=3": {
+      "model": "wares:block/mailbox_full",
+      "y": 90
+    }
+  }
+}
