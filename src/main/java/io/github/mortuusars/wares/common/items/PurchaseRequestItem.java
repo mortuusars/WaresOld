@@ -5,6 +5,7 @@ import io.github.mortuusars.wares.common.PurchaseRequestMenu;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrate;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModItems;
+import io.github.mortuusars.wares.setup.ModLangKeys;
 import io.github.mortuusars.wares.setup.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
@@ -31,7 +32,7 @@ import java.util.Optional;
 
 public class PurchaseRequestItem extends Item {
 
-    public static final Component DISPLAY_NAME = new TranslatableComponent("container.purchase_request");
+    public static final Component DISPLAY_NAME = new TranslatableComponent(ModLangKeys.CONTAINER_PURCHASE_REQUEST);
 
     public PurchaseRequestItem(Properties pProperties) {
         super(pProperties);

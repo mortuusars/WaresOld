@@ -6,6 +6,7 @@ import io.github.mortuusars.wares.lib.ModConstants;
 import io.github.mortuusars.wares.lib.enums.TimeOfDay;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
 import io.github.mortuusars.wares.setup.ModItems;
+import io.github.mortuusars.wares.setup.ModLangKeys;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class MailboxBlockEntity extends InventoryBlockEntity implements MenuProvider {
 
-    private static final Component DISPLAY_NAME = new TranslatableComponent("container.mailbox");
+    private static final Component DISPLAY_NAME = new TranslatableComponent(ModLangKeys.CONTAINER_MAILBOX);
 
     public MailboxBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.MAILBOX.get(), pos, blockState, Mailbox.SLOTS);
@@ -137,7 +138,5 @@ public class MailboxBlockEntity extends InventoryBlockEntity implements MenuProv
         ItemStack newRequest = Mailbox.getRandomPurchaseRequest(existingRequests);
         int slotIndex = emptySlots.get(ModConstants.RANDOM.nextInt(0, emptySlots.size()));
         mailboxEntity.insertItem(slotIndex, newRequest);
-
-//            Wares.LOGGER.info("Added new request!");
     }
 }

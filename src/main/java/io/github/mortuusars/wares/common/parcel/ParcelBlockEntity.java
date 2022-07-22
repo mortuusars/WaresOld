@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.github.mortuusars.wares.common.base.InventoryBlockEntity;
 import io.github.mortuusars.wares.common.extensions.IOpenersCounter;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
+import io.github.mortuusars.wares.setup.ModLangKeys;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -70,7 +71,7 @@ public class ParcelBlockEntity extends InventoryBlockEntity implements MenuProvi
 
     @Override
     public @NotNull Component getDisplayName() {
-        return new TranslatableComponent("container.payment_parcel");
+        return new TranslatableComponent(ModLangKeys.CONTAINER_PARCEL);
     }
 
     @Nullable

@@ -1,4 +1,13 @@
 {
   "block.wares.crate": "Crate",
-  "block.wares.shipping_crate": "Shipping Crate"
+  "block.wares.shipping_crate": "Shipping Crate",
+  "container.wares.crate": "Crate",
+  "container.wares.mailbox": "Mailbox",
+  "container.wares.parcel": "Parcel",
+  "container.wares.purchase_request": "Purchase Request",
+  "container.wares.shipping_crate": "Shipping Crate",
+  "gui.wares.experience_tooltip": "Experience reward",
+  "gui.wares.mailbox.trash_can_tooltip": "Trash Can",
+  "gui.wares.purchase_request.from": "From",
+  "gui.wares.purchase_request.title": "Purchase Request"
 }

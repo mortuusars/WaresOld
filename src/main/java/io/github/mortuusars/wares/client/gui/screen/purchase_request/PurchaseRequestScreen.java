@@ -93,7 +93,7 @@ public class PurchaseRequestScreen extends BaseContainerScreen<PurchaseRequestMe
         // BUYER
         if (!ware.description().buyer().isBlank()){
             Component buyerComponent = new TranslatableComponent(ModLangKeys.GUI_PURCHASE_REQUEST_FROM).withStyle(ChatFormatting.ITALIC)
-                    .append(new TextComponent(": " + ware.description().buyer()));
+                    .append(new TextComponent(": " + ware.description().buyer()).withStyle(ChatFormatting.RESET));
 
             lastElementEndPos = addElement(
                     new TextElement<>(this, BUYER_ID, fromLeft(10), lastElementEndPos.y + MESSAGE_Y_MARGIN,

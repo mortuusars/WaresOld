@@ -7,6 +7,7 @@ import io.github.mortuusars.wares.common.extensions.IOpenersCounter;
 import io.github.mortuusars.wares.core.ware.WareProgression;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlockEntities;
+import io.github.mortuusars.wares.setup.ModLangKeys;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("NullableProblems")
 public class ShippingCrateBlockEntity extends InventoryBlockEntity implements MenuProvider, IOpenersCounter {
 
-    public static final MutableComponent DISPLAY_NAME = new TranslatableComponent("container.shipping_crate");
+    public static final MutableComponent DISPLAY_NAME = new TranslatableComponent(ModLangKeys.CONTAINER_SHIPPING_CRATE);
 
     private Ware ware;
 

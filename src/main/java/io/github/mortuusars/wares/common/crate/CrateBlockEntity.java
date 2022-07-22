@@ -1,5 +1,6 @@
 package io.github.mortuusars.wares.common.crate;
 
+import io.github.mortuusars.wares.setup.ModLangKeys;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -14,6 +15,6 @@ public class CrateBlockEntity extends BarrelBlockEntity {
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return new TranslatableComponent("container.crate");
+        return new TranslatableComponent(ModLangKeys.CONTAINER_CRATE);
     }
 }
