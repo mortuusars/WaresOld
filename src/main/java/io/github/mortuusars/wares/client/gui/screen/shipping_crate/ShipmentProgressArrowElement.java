@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
+package io.github.mortuusars.wares.client.gui.screen.shipping_crate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
@@ -22,7 +22,7 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
 
     private final Ware ware;
 
-    public ShipmentProgressArrowElement(ShippingCrateScreen parentScreen, int id, int posX, int posY, Ware ware) {
+    public ShipmentProgressArrowElement(ShippingCrateScreen parentScreen, String id, int posX, int posY, Ware ware) {
         super(parentScreen, id, posX, posY, WIDTH, HEIGHT);
         this.ware = ware;
     }
@@ -88,7 +88,7 @@ public class ShipmentProgressArrowElement extends ScreenElement<ShippingCrateScr
         if (isProgressFull()){
             LocalPlayer player = screen.getMinecraft().player;
             player.level.playSound(player, player.position().x, player.position().y, player.position().z, SoundEvents.SCAFFOLDING_BREAK, SoundSource.BLOCKS, 0.5f, 1f);
-            screen.getMinecraft().gameMode.handleInventoryButtonClick(screen.getMenu().containerId, id);
+            screen.getMinecraft().gameMode.handleInventoryButtonClick(screen.getMenu().containerId, ShippingCrateScreen.SHIP_WARE_BUTTON_ID);
         }
     }
 

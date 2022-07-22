@@ -27,11 +27,7 @@ public class PaymentParcelScreen extends BaseContainerScreen<ParcelMenu> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1, 1,1, 1);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        blit(poseStack, getGuiLeft(), getGuiTop(), 0,0, imageWidth, imageHeight); // Gui Texture
-        super.renderBg(poseStack, partialTick, mouseX, mouseY);
+    public ResourceLocation getBackgroundTexture() {
+        return TEXTURE;
     }
 }

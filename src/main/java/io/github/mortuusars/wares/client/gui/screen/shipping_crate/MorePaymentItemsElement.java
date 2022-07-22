@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
+package io.github.mortuusars.wares.client.gui.screen.shipping_crate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.client.gui.screen.base.ScreenElement;
@@ -20,7 +20,7 @@ public class MorePaymentItemsElement extends ScreenElement<ShippingCrateScreen> 
 
     private List<Component> tooltipComponents = new ArrayList<>();
 
-    public MorePaymentItemsElement(ShippingCrateScreen parentScreen, int id, int posX, int posY, List<ItemStack> excessStacks) {
+    public MorePaymentItemsElement(ShippingCrateScreen parentScreen, String id, int posX, int posY, List<ItemStack> excessStacks) {
         super(parentScreen, id, posX, posY, 18, 18);
         this.excessStacks = excessStacks;
 

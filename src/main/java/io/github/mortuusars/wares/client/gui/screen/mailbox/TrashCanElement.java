@@ -11,7 +11,7 @@ public class TrashCanElement extends ScreenElement<MailboxScreen> {
 
     private static final Component TOOLTIP_TEXT = new TranslatableComponent("gui.mailbox.trash_can_tooltip");
 
-    public TrashCanElement(MailboxScreen parentScreen, int id, int posX, int posY) {
+    public TrashCanElement(MailboxScreen parentScreen, String id, int posX, int posY) {
         super(parentScreen, id, posX, posY, 18, 18);
     }
 

@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
+package io.github.mortuusars.wares.client.gui.screen.shipping_crate;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.client.gui.screen.base.ScreenElement;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class PaymentItemElement extends ScreenElement<ShippingCrateScreen> {
     public ItemStack paymentItemStack;
 
-    public PaymentItemElement(ShippingCrateScreen parentScreen, int id, int posX, int posY, ItemStack paymentItemStack) {
+    public PaymentItemElement(ShippingCrateScreen parentScreen, String id, int posX, int posY, ItemStack paymentItemStack) {
         super(parentScreen, id, posX, posY, 18, 18);
         this.paymentItemStack = paymentItemStack;
     }

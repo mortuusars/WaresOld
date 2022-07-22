@@ -12,9 +12,11 @@ import io.github.mortuusars.wares.core.types.IntegerRange;
 import io.github.mortuusars.wares.lib.ModConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.*;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -85,6 +87,21 @@ public record WareItem(Item item, TagKey<Item> tag, Optional<CompoundTag> nbt,
 
         return Items.AIR;
     }
+
+    public MutableComponent getDescriptiveName(){
+        TextComponent count = new TextComponent(" x" + count().map(i -> i, range -> range.min() + " - " + range.max()));
+
+        if (isItem()){
+            ItemStack stack = new ItemStack(item);
+            if (nbt().isPresent())
+                stack.setTag(nbt().get());
+            return ((BaseComponent) stack.getHoverName()).append(count);
+        }
+        else {
+            return new TextComponent("#" + tag().location()).append(count);
+        }
+    }
+
 
     // <Serialization>
 

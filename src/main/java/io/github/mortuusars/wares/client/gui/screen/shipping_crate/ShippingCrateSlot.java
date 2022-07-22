@@ -1,4 +1,4 @@
-package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
+package io.github.mortuusars.wares.client.gui.screen.shipping_crate;
 
 import io.github.mortuusars.wares.client.gui.BillSlot;
 import net.minecraft.world.entity.player.Player;

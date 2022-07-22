@@ -2,6 +2,7 @@ package io.github.mortuusars.wares.lib.enums;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.Nullable;
@@ -46,5 +47,9 @@ public enum Rarity implements StringRepresentable {
     @Override
     public String getSerializedName() {
         return this.name;
+    }
+
+    public String getKey(){
+        return "gui.wares.rarity." + name;
     }
 }

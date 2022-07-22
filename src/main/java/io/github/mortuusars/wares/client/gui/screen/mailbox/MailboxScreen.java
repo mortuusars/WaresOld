@@ -15,7 +15,7 @@ public class MailboxScreen extends BaseContainerScreen<MailboxMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Wares.MOD_ID, "textures/gui/mailbox.png");
 
-    private static final int TRASH_CAN_ID = 0;
+    private static final String TRASH_CAN_ID = "trash_can";
 
     public MailboxScreen(MailboxMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -32,11 +32,7 @@ public class MailboxScreen extends BaseContainerScreen<MailboxMenu> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1, 1,1, 1);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        blit(poseStack, getGuiLeft(), getGuiTop(), 0,0, imageWidth, imageHeight); // Gui Texture
-        super.renderBg(poseStack, partialTick, mouseX, mouseY);
+    public ResourceLocation getBackgroundTexture() {
+        return TEXTURE;
     }
 }

@@ -25,7 +25,7 @@ public class Mailbox {
         Optional<Ware> randomWareOptional = Wares.WARE_STORAGE.getRandomWare();
         if (randomWareOptional.isPresent()){
             ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
-            if (Ware.writeAsNBT(request, randomWareOptional.get()))
+            if (Ware.writeToStackNBT(request, randomWareOptional.get()))
                 return request;
             else LOGGER.error("Ware was not written to the stack nbt. New Purchase Request would not be created.");
         }

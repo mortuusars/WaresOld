@@ -23,6 +23,8 @@ public class DeliveryNoteBlock extends Block implements EntityBlock {
         super(properties);
     }
 
+    //TODO: Random rotation.
+
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;

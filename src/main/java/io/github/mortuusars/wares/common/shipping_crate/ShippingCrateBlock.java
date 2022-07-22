@@ -73,7 +73,7 @@ public class ShippingCrateBlock extends Block implements EntityBlock {
             Ware ware = shippingCrateEntity.getWare();
             if (ware != null){
                 ItemStack request = new ItemStack(ModItems.PURCHASE_REQUEST.get());
-                Ware.writeAsNBT(request, ware);
+                Ware.writeToStackNBT(request, ware);
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), request);
             }
         }

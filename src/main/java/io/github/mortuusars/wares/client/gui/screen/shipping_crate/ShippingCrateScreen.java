@@ -1,13 +1,9 @@
-package io.github.mortuusars.wares.client.gui.screen.shippingcrate;
+package io.github.mortuusars.wares.client.gui.screen.shipping_crate;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.client.gui.screen.base.BaseContainerScreen;
-import io.github.mortuusars.wares.client.gui.screen.shippingcrate.MorePaymentItemsElement;
-import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentItemElement;
-import io.github.mortuusars.wares.client.gui.screen.shippingcrate.PaymentRequestElement;
-import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShipmentProgressArrowElement;
 import io.github.mortuusars.wares.common.shipping_crate.ShippingCrateMenu;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -20,9 +16,11 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Wares.MOD_ID, "textures/gui/shipping_crate.png");
 
-    public static final int PROGRESS_ARROW_ID = 0;
-    public static final int PURCHASE_REQUEST_ID = 1;
-    public static final int PAYMENT_ITEMS_START_ID = 2;
+    public static final int SHIP_WARE_BUTTON_ID = 0;
+
+    public static final String PROGRESS_ARROW_ID = "progress_arrow";
+    public static final String PURCHASE_REQUEST_ID = "purchase_request";
+    public static final String PAYMENT_ITEM_ID = "payment_item";
 
     private static final int PAYMENT_ITEMS_START_X = 150;
     private static final int PAYMENT_ITEMS_START_Y = 17;
@@ -63,11 +61,11 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
                 if (index >= menu.paymentItems.size())
                     break;
                 else if (index == MAX_PAYMENT_ITEMS -1 && menu.paymentItems.size() > MAX_PAYMENT_ITEMS)
-                    addElement(new MorePaymentItemsElement(this, index + PAYMENT_ITEMS_START_ID, paymentX + column * 18, paymentY + row * 18,
+                    addElement(new MorePaymentItemsElement(this, PAYMENT_ITEM_ID + index, paymentX + column * 18, paymentY + row * 18,
                             menu.paymentItems.stream().skip(MAX_PAYMENT_ITEMS).toList()));
                 else {
                     ItemStack paymentItem = menu.paymentItems.get(index);
-                    addElement(new PaymentItemElement(this, index + PAYMENT_ITEMS_START_ID, paymentX + column * 18, paymentY + row * 18, paymentItem));
+                    addElement(new PaymentItemElement(this, PAYMENT_ITEM_ID + index, paymentX + column * 18, paymentY + row * 18, paymentItem));
                 }
                 index++;
             }
@@ -83,11 +81,7 @@ public class ShippingCrateScreen extends BaseContainerScreen<ShippingCrateMenu> 
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1, 1,1, 1);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        blit(poseStack, getGuiLeft(), getGuiTop(), 0,0, imageWidth, imageHeight); // Gui Texture
-        super.renderBg(poseStack, partialTick, mouseX, mouseY);
+    public ResourceLocation getBackgroundTexture() {
+        return TEXTURE;
     }
 }

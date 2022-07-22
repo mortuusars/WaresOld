@@ -22,7 +22,7 @@ public record WareData(WareDescription description, Rarity rarity, int weight,
             Codec.intRange(1, Integer.MAX_VALUE).optionalFieldOf("weight", 1).forGetter(WareData::weight),
             WareItem.CODEC.listOf().fieldOf("requestedItems").forGetter(WareData::requestedItems),
             WareItem.CODEC.listOf().fieldOf("paymentItems").forGetter(WareData::paymentItems),
-            Codec.either(Codec.INT, IntegerRange.CODEC).optionalFieldOf("experience", Either.left(0)).forGetter(WareData::experience),
+            Codec.either(Codec.intRange(0, Integer.MAX_VALUE), IntegerRange.CODEC).optionalFieldOf("experience", Either.left(0)).forGetter(WareData::experience),
             DeliveryTimeData.CODEC.optionalFieldOf("deliveryTime", DeliveryTimeData.nextMorning()).forGetter(WareData::deliveryTime)
     ).apply(instance, WareData::new));
 }

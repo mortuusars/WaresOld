@@ -1,7 +1,7 @@
 package io.github.mortuusars.wares.common.shipping_crate;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.mortuusars.wares.client.gui.screen.shippingcrate.ShippingCrateScreen;
+import io.github.mortuusars.wares.client.gui.screen.shipping_crate.ShippingCrateScreen;
 import io.github.mortuusars.wares.common.base.WaresAbstractContainerMenu;
 import io.github.mortuusars.wares.core.ware.data.Ware;
 import io.github.mortuusars.wares.setup.ModBlocks;
@@ -33,7 +33,6 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
         level = playerInventory.player.getLevel();
         blockEntity = (ShippingCrateBlockEntity) level.getBlockEntity(pos);
         this.playerInventory = playerInventory;
-
 
         if (blockEntity == null)
             return;
@@ -79,7 +78,7 @@ public class ShippingCrateMenu extends WaresAbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int elementID) {
-        if (elementID == ShippingCrateScreen.PROGRESS_ARROW_ID){
+        if (elementID == ShippingCrateScreen.SHIP_WARE_BUTTON_ID){
             blockEntity.shipWare(player);
         }
 
